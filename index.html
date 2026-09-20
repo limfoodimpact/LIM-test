@@ -50,6 +50,55 @@
   .lim-flow .flow-dot,.lim-flow.is-playing .flow-dot{animation:none;left:50%;opacity:1;transform:translate(-50%,-50%)}
 }
 </style>
+
+<style>
+/* TEST 비교안 B — 중앙정렬 + 따뜻한 온도감
+   확정 문구/구조/Flow 로직은 변경하지 않음 */
+.hero{
+  background:#FFFBF4;
+}
+.hero .wrap{
+  text-align:center;
+}
+.hero .eyebrow,
+.hero h1,
+.hero .answer,
+.hero .tagline{
+  text-align:center;
+}
+.hero h1{
+  max-width:980px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.hero .answer{
+  max-width:760px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.hero .tagline{
+  color:#49677F;
+}
+.lim-flow{
+  margin-left:auto;
+  margin-right:auto;
+}
+.flow-track::before{
+  background:#E4DDD2;
+}
+@media(max-width:720px){
+  .hero{
+    padding-top:48px;
+    padding-bottom:54px;
+  }
+  .hero h1{
+    max-width:100%;
+  }
+  .hero .answer{
+    max-width:100%;
+  }
+}
+</style>
 </head><body><header class="site-header"><div class="wrap header-in">
 <a class="logo" href="./index.html"><img src="./lim-logo.png" alt="LIM Food Impact"></a>
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menuDrawer">메뉴 <span>☰</span></button>
