@@ -1,0 +1,32 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>기부 결과 | LIM</title><link rel="stylesheet" href="./site.css"></head><body>
+<header class="site-header"><div class="wrap header-in">
+<a class="logo" href="./index.html"><img src="./lim-logo.png" alt="LIM Food Impact"></a>
+<button class="menu-btn" type="button" aria-expanded="false" aria-controls="menuDrawer">메뉴 <span>☰</span></button>
+</div></header>
+<div class="menu-backdrop" data-menu-close></div>
+<aside class="menu-drawer" id="menuDrawer" aria-hidden="true">
+<div class="menu-top"><strong>LIM</strong><button class="menu-close" type="button" data-menu-close aria-label="메뉴 닫기">×</button></div>
+<nav class="drawer-nav" aria-label="전체 메뉴">
+<a href="./value.html"><strong>줄어든 가치</strong><span>가치는 어떻게 정하나요?</span></a>
+<a href="./donation.html"><strong>기부 내역</strong><span>얼마가 어디로 전달되었나요?</span></a>
+<a href="./index.html#stores"><strong>참여 매장</strong><span>현재 함께하는 매장</span></a>
+<a href="./apply.html"><strong>사장님 참여</strong><span>LIM 참여 신청</span></a>
+<a href="./story.html"><strong>LIM 이야기</strong><span>LIM을 시작한 이유</span></a>
+<a href="./feedback.html"><strong>궁금한 점 · 바라는 점</strong><span>질문과 의견 남기기</span></a>
+</nav></aside>
+<main>
+<section class="page-hero"><div class="wrap content"><div class="eyebrow">기부 내역</div>
+<h1>얼마나, 어디로<br>전달되었나요?</h1></div></section>
+<section class="section donation-now"><div class="wrap content">
+<div class="status-card"><span class="status-pill">현재</span><h2>시범운영 중입니다.</h2>
+<p>홍제동우동국수와 장수해물탕에서 선택을 기록하고 있습니다.</p>
+<p>첫 기부 결과부터 이곳에 공개합니다.</p></div>
+</div></section></main>
+<footer><div class="wrap foot"><span>LESS IS MORE · 남는 곳에서, 필요한 곳으로.</span><span><a href="./feedback.html">궁금한 점 · 바라는 점</a></span></div></footer>
+<script>
+(()=>{const b=document.querySelector('.menu-btn'),d=document.querySelector('.menu-drawer'),bg=document.querySelector('.menu-backdrop');
+if(!b||!d)return; const set=(on)=>{document.body.classList.toggle('menu-open',on);b.setAttribute('aria-expanded',String(on));d.setAttribute('aria-hidden',String(!on));};
+b.addEventListener('click',()=>set(!document.body.classList.contains('menu-open')));
+document.querySelectorAll('[data-menu-close]').forEach(x=>x.addEventListener('click',()=>set(false)));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false)});})();</script></body></html>

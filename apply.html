@@ -1,0 +1,117 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>사장님 참여 문의 | LIM Food Impact</title>
+<style>
+:root{--navy:#1F4E79;--mid:#3E7CB1;--light:#6FA8DC;--gold:#E8C97A;--cream:#FFF6E9;--gray:#F2F5F8;--ink:#263746;--muted:#657786}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#fff;color:var(--ink);font-family:Arial,"Malgun Gothic",sans-serif;line-height:1.7;word-break:keep-all}
+header{height:72px;max-width:980px;margin:auto;padding:0 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}header img{width:170px;max-width:45vw;display:block}a{color:var(--navy)}
+.home{font-size:14px;font-weight:800;text-decoration:none}
+main{max-width:980px;margin:auto;padding:0 22px 70px}
+.hero{min-height:500px;border-radius:28px;background:var(--cream);padding:64px clamp(24px,6vw,66px);display:flex;align-items:center;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(232,201,122,.18);right:-72px;bottom:-80px}
+.eyebrow{font-size:12px;font-weight:900;letter-spacing:.14em;color:var(--mid);margin-bottom:18px}
+h1,h2,h3{color:var(--navy);line-height:1.3;letter-spacing:-.035em}h1{font-size:clamp(34px,5.8vw,54px);margin:0 0 22px}h2{font-size:clamp(27px,4vw,36px);margin:0 0 12px}
+.hero p{font-size:clamp(16px,2vw,19px);color:#526779;margin:0 0 8px}.hero strong{color:var(--navy)}
+.cta,button{display:inline-flex;align-items:center;justify-content:center;margin-top:26px;padding:13px 21px;min-height:50px;border:0;border-radius:999px;background:var(--navy);color:#fff;font-weight:900;cursor:pointer;text-decoration:none;font:inherit}
+.steps{padding:82px 0 68px}.section-head{text-align:center;margin-bottom:38px}.section-head p{margin:0;color:var(--muted)}
+.stepgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.step{border:1px solid #e3e9ee;border-radius:20px;padding:24px 20px;background:#fff;min-height:205px}.num{font-size:12px;font-weight:900;letter-spacing:.12em;color:var(--gold);margin-bottom:22px}.step h3{font-size:20px;margin:0 0 9px}.step p{font-size:14px;color:#647683;margin:0}.closing{text-align:center;margin:32px 0 0;color:var(--navy);font-weight:900}
+.formwrap{background:var(--gray);border-radius:28px;padding:clamp(24px,5vw,52px)}.formcard{max-width:720px;margin:auto;background:#fff;border:1px solid #dce5ec;border-radius:22px;padding:clamp(22px,5vw,38px)}.formcard>p{color:#607380;margin-top:0}
+label{display:block;font-weight:800;margin:20px 0 6px;color:#344b5c}input,select,textarea,button{font:inherit}input:not([type=checkbox]),select,textarea{width:100%;padding:13px 14px;border:1px solid #aebdca;border-radius:11px;background:white;color:var(--ink)}input:focus,select:focus,textarea:focus{outline:2px solid rgba(62,124,177,.18);border-color:var(--mid)}textarea{min-height:105px;resize:vertical}button{background:var(--gold);color:var(--navy);border-radius:12px;width:100%}button:disabled{opacity:.6}
+input[type=checkbox]{width:21px;height:21px;vertical-align:middle}.note{font-size:13px;color:#647683}.status{white-space:pre-wrap;overflow-wrap:anywhere}.trap{position:absolute;left:-10000px}[hidden]{display:none!important}
+details{background:var(--gray);padding:14px 16px;border-radius:12px;margin-top:20px}summary{cursor:pointer;font-weight:800;color:#455d6e}.consent{font-size:14px}
+.done{max-width:720px;margin:30px auto 0;background:#fff;border:1px solid #dce5ec;border-radius:22px;padding:32px}
+@media(max-width:760px){header{height:64px;padding:0 16px}header img{width:150px}main{padding:0 14px 50px}.hero{min-height:455px;border-radius:22px;padding:44px 24px}.hero:after{width:150px;height:150px}.steps{padding:62px 2px 54px}.stepgrid{grid-template-columns:1fr 1fr}.step{min-height:180px;padding:21px 18px}.formwrap{border-radius:22px;padding:18px}.formcard{padding:22px 18px}}
+@media(max-width:470px){.stepgrid{grid-template-columns:1fr}.step{min-height:auto}.hero p br{display:none}}
+</style><style id="apply-v3-polish">
+/* 첫 화면: 설명보다 제목이 먼저 들어오도록 */
+.hero>div{position:relative;z-index:1;max-width:720px}
+.hero .eyebrow{margin-bottom:14px}
+.hero h1{margin-bottom:25px}
+.hero p+p{margin-top:13px}
+.hero .cta{margin-top:30px}
+
+/* 4단계: 번호 → 행동 → 설명 위계를 더 분명하게 */
+.step{position:relative;overflow:hidden;transition:transform .2s ease,border-color .2s ease}
+.step:before{content:"";position:absolute;left:0;top:0;width:100%;height:3px;background:var(--gold);opacity:.72}
+.num{margin-bottom:18px}.step h3{font-size:19px}.step p{line-height:1.65}
+.closing{max-width:650px;margin:34px auto 0}
+
+/* 문의폼 진입 시 별도 페이지처럼 느껴지지 않게 */
+.formwrap{margin-top:8px}
+.formcard h2{margin-bottom:10px}
+.formcard>p{margin-bottom:25px}
+.formcard label:first-of-type{margin-top:12px}
+details:not([open]){padding-bottom:14px}
+
+/* 제출 버튼은 폼의 마지막 행동으로만 강조 */
+#send{margin-top:24px;min-height:52px}
+#message:empty{display:none}
+
+/* 모바일에서는 카드 4개를 세로로: 사장님이 순서를 바로 읽도록 */
+@media(max-width:620px){
+ .hero{min-height:430px;padding:42px 22px}
+ .hero h1{font-size:36px;line-height:1.28}
+ .hero p{font-size:16px}
+ .stepgrid{grid-template-columns:1fr}
+ .step{min-height:auto;padding:20px 19px}
+ .num{margin-bottom:10px}
+ .step h3{margin-bottom:5px}
+ .steps{padding-top:58px}
+ .section-head{margin-bottom:28px}
+ .closing{font-size:15px}
+ .formwrap{padding:12px;background:var(--gray)}
+ .formcard{border-radius:18px}
+}
+</style>
+<style id="apply-v4-less">
+/* V4 LESS — 반복 설명을 걷어내고 제목·행동·폼에 집중 */
+.hero{min-height:470px}
+.steps{padding-top:74px}
+.section-head{margin-bottom:34px}
+.formcard>p{margin-bottom:22px}
+@media(max-width:620px){
+ .hero{min-height:405px}
+ .steps{padding-top:52px}
+}
+</style>
+<style id="apply-v5-final-review">
+/* V5 — 페이지 역할을 '부담 없는 문의'로 마감 */
+.step-cta{text-align:center;margin-top:26px}
+.step-cta .cta{margin-top:0;background:transparent;color:var(--navy);border:1px solid rgba(31,78,121,.22);min-height:46px}
+.step-cta .cta:hover{background:rgba(31,78,121,.04)}
+#form-area{scroll-margin-top:24px}
+@media(max-width:620px){
+ .step-cta{margin-top:22px}
+ .step-cta .cta{width:100%;max-width:330px}
+}
+</style>
+</head><body>
+<header><a href="./index.html"><img src="./lim-logo.png" alt="LIM Food Impact 홈으로"></a><a class="home" href="./index.html">홈으로</a></header>
+<main>
+<section class="hero"><div><div class="eyebrow">사장님 참여 문의</div><h1>필요한 만큼 제공하는 매장,<br>LIM과 함께 시작해보세요.</h1><p>손님이 원하지 않는 음식은 처음부터 받지 않도록<br><strong>매장에 맞는 작은 선택부터 함께 정합니다.</strong></p><a class="cta" href="#how">한 달 참여 방법 보기 ↓</a></div></section>
+
+<section class="steps" id="how"><div class="section-head"><div class="eyebrow">ONE MONTH PILOT</div><h2>한 달 동안 이렇게 합니다</h2></div>
+<div class="stepgrid">
+<article class="step"><div class="num">01</div><h3>함께 정합니다</h3><p>손님이 선택할 수 있는 항목과 방법을 매장과 함께 정합니다.</p></article>
+<article class="step"><div class="num">02</div><h3>LIM이 준비합니다</h3><p>손님이 선택 방법을 바로 이해할 수 있도록 매장 안내물을 준비합니다.</p></article>
+<article class="step"><div class="num">03</div><h3>손님이 선택합니다</h3><p>손님이 직접 선택하고, 매장은 선택한 만큼만 제공합니다. 따로 권하실 필요는 없습니다.</p></article>
+<article class="step"><div class="num">04</div><h3>간단히 기록합니다</h3><p>하루 전체 주문 건수와 제외·감량 선택 건수, 두 숫자만 기록합니다.</p></article>
+</div><p class="closing">한 달 뒤, 실제 선택이 얼마나 있었고 어떤 변화가 있었는지 함께 확인합니다.</p>
+<div class="step-cta"><a class="cta" href="#form-area">설명 먼저 들어보기 ↓</a></div></section>
+
+<section class="formwrap" id="form-area"><div class="formcard"><div class="eyebrow">CONTACT</div><h2>우리 가게 참여 문의</h2><p>설명만 먼저 들어보셔도 괜찮습니다.</p>
+<form id="form">
+<label for="store">매장명 *</label><input id="store" name="store" required maxlength="80" autocomplete="organization">
+<label for="region">매장 지역 *</label><input id="region" name="region" required maxlength="80" placeholder="예: 경기 안양시 동안구">
+<label for="phone">연락받을 전화번호 *</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" pattern="[0-9+() -]{9,20}" placeholder="010-1234-5678">
+<label for="intent">어떤 내용이 궁금하세요?</label><select id="intent"><option>먼저 설명을 듣고 싶어요</option><option>참여를 검토하고 있어요</option></select>
+<label for="question">궁금한 점이 있으시면 남겨주세요 (선택)</label><textarea id="question" maxlength="1000" placeholder="연락 가능한 시간이나 궁금한 내용을 자유롭게 남겨 주세요."></textarea>
+<div class="trap" aria-hidden="true"><label>홈페이지<input id="website" tabindex="-1" autocomplete="off"></label></div>
+<details open><summary>개인정보 수집·이용 안내</summary><p class="note">처리 주체: LIM Food Impact 운영자 강석구·강민구<br>목적: 매장 참여 상담 및 문의 응대<br>필수 항목: 매장명, 지역, 전화번호<br>선택 항목: 문의 성격, 문의 내용<br>보유 기간: 접수일부터 최대 90일. 기간 만료 후 삭제하며, 삭제를 요청하시면 상담에 사용한 연락처로 운영자에게 말씀해 주세요.<br>동의를 거부할 수 있으며, 거부하시면 온라인 문의 접수가 제한됩니다. 참여 확정 후 필요한 정보와 매장 공개 동의는 별도로 안내합니다.</p></details>
+<label class="consent"><input id="consent" type="checkbox" required> [필수] 위 개인정보 수집·이용에 동의합니다.</label>
+<button id="send" type="submit">참여 문의 보내기</button><p id="message" role="status" class="status"></p></form></div>
+<section id="done" class="done" hidden tabindex="-1"><h2>참여 문의가 접수되었습니다.</h2><p>남겨주신 연락처로 운영자가 연락드리겠습니다.</p><p id="receipt"></p><a href="./index.html">LIM 홈페이지 보기 →</a></section></section>
+</main>
+<script>
+const BASE='https://slrbqhygpexksvduluev.supabase.co',KEY='sb_publishable_K9fILZLweR1Qi8IBQyNEmA_OMV1F4yb';
+const $=s=>document.querySelector(s);let requestId=crypto.randomUUID();
+$('#form').addEventListener('submit',async e=>{e.preventDefault();if($('#website').value)return;const phone=$('#phone').value.replace(/[^0-9]/g,'');if(!/^0[0-9]{8,10}$/.test(phone)){$('#message').textContent='전화번호를 확인해 주세요.';return}$('#send').disabled=true;$('#message').textContent='접수 중입니다…';try{const r=await fetch(BASE+'/rest/v1/rpc/submit_store_inquiry',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({p_request_id:requestId,p_store:$('#store').value.trim(),p_region:$('#region').value.trim(),p_food:'',p_phone:phone,p_intent:$('#intent').value,p_question:$('#question').value.trim(),p_consent:$('#consent').checked})});const data=await r.json();if(!r.ok)throw new Error();if(typeof data!=='string')throw new Error();$('#form').hidden=true;$('#done').hidden=false;$('#receipt').textContent='접수번호: '+data;$('#done').focus();}catch(e){$('#message').textContent='접수 결과를 확인하지 못했습니다. 입력 내용은 유지됩니다. 잠시 후 같은 화면에서 다시 눌러 주세요.';$('#send').disabled=false;}});
+</script></body></html>
