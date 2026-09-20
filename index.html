@@ -60,6 +60,53 @@
   background:#E4DDD2;
 }
 </style>
+
+<style>
+/* 참여 매장 — 실제 현장이 주인공인 2열 갤러리 */
+#stores.section.alt{background:#FFF8EF}
+#stores h2{margin-bottom:30px}
+#stores .stores{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:34px;
+}
+#stores .store-card{
+  display:block;min-width:0;background:transparent;border:0;
+  border-radius:0;overflow:visible;box-shadow:none;text-decoration:none;
+}
+#stores .store-card img{
+  display:block;width:100%;height:auto;aspect-ratio:4/3;
+  min-height:0;max-height:none;object-fit:cover;border-radius:22px;
+}
+#stores .store-copy{display:block;padding:18px 3px 0}
+#stores .store-copy .eyebrow{display:block;margin-bottom:7px}
+#stores .store-copy h3{
+  margin:0;font-size:clamp(24px,2.2vw,30px);line-height:1.25;
+}
+#stores .store-copy .choice{
+  margin:13px 0 0!important;font-size:17px;line-height:1.55;
+}
+#stores .store-card:focus-visible{
+  outline:3px solid rgba(62,124,177,.35);
+  outline-offset:7px;border-radius:22px;
+}
+@media(hover:hover){
+  #stores .store-card img{transition:transform .28s ease,box-shadow .28s ease}
+  #stores .store-card:hover img{
+    transform:translateY(-3px);
+    box-shadow:0 12px 28px rgba(31,78,121,.10);
+  }
+}
+@media(max-width:720px){
+  #stores.section.alt{padding-top:50px;padding-bottom:54px}
+  #stores h2{margin-bottom:24px}
+  #stores .stores{grid-template-columns:1fr;gap:38px}
+  #stores .store-card img{aspect-ratio:4/3;border-radius:18px}
+  #stores .store-copy{padding:15px 2px 0}
+  #stores .store-copy h3{font-size:26px}
+  #stores .store-copy .choice{margin-top:10px!important;font-size:17px}
+}
+</style>
 </head><body><header class="site-header"><div class="wrap header-in">
 <a class="logo" href="./index.html"><img src="./lim-logo.png" alt="LIM Food Impact"></a>
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menuDrawer">메뉴 <span>☰</span></button>
