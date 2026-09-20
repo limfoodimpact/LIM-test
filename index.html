@@ -1,4 +1,56 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LIM Food Impact</title><link rel="stylesheet" href="./site.css"></head><body><header class="site-header"><div class="wrap header-in">
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LIM Food Impact</title><link rel="stylesheet" href="./site.css">
+<style>
+/* TEST v5.1 — hero hierarchy only */
+.hero{min-height:500px;padding:58px 0 64px}
+.hero h1{
+  font-size:clamp(38px,5.2vw,60px);
+  line-height:1.14;
+  margin:14px 0 24px;
+}
+.hero .answer{
+  font-size:clamp(22px,2.55vw,29px);
+  line-height:1.48;
+  margin:0;
+}
+.hero .tagline{
+  margin-top:26px;
+  font-size:15px;
+  font-weight:700;
+  color:var(--navy);
+}
+@media(max-width:720px){
+  .hero{padding:44px 0 50px}
+  .hero h1{font-size:36px;line-height:1.16;margin:12px 0 22px}
+  .hero .answer{font-size:21px;line-height:1.5}
+  .hero .tagline{margin-top:24px;font-size:14px}
+}
+</style>
+
+<style>
+/* TEST v5.2 — 검토: 핵심어 강조 + LIM Flow */
+.hero-key{color:var(--mid-blue,#3E7CB1)}
+.lim-flow{width:min(520px,100%);margin:34px 0 0;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px}
+.flow-word{color:#748494;font-size:12px;line-height:1;font-weight:800;letter-spacing:.22em}
+.flow-track{position:relative;display:block;height:20px}
+.flow-track::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:#d8e1e8;transform:translateY(-50%)}
+.flow-dot{position:absolute;left:0;top:50%;width:13px;height:13px;border-radius:50%;background:#E8C97A;transform:translate(0,-50%);opacity:0;box-shadow:0 0 0 rgba(232,201,122,0)}
+.lim-flow.is-playing .flow-dot{animation:limFlowMove 3.8s cubic-bezier(.42,0,.22,1) forwards}
+@keyframes limFlowMove{
+  0%{left:0;opacity:0;transform:translate(0,-50%) scale(.72);box-shadow:0 0 0 rgba(232,201,122,0)}
+  8%{opacity:1;transform:translate(0,-50%) scale(1)}
+  78%{left:calc(100% - 13px);opacity:1;transform:translate(0,-50%) scale(1)}
+  88%{left:calc(100% - 13px);opacity:1;transform:translate(0,-50%) scale(1.28);box-shadow:0 0 16px rgba(232,201,122,.52)}
+  100%{left:calc(100% - 13px);opacity:0;transform:translate(0,-50%) scale(.92);box-shadow:0 0 0 rgba(232,201,122,0)}
+}
+@media(max-width:720px){
+  .lim-flow{margin-top:30px;gap:13px}
+  .flow-word{font-size:11px;letter-spacing:.18em}
+}
+@media(prefers-reduced-motion:reduce){
+  .lim-flow .flow-dot,.lim-flow.is-playing .flow-dot{animation:none;left:50%;opacity:1;transform:translate(-50%,-50%)}
+}
+</style>
+</head><body><header class="site-header"><div class="wrap header-in">
 <a class="logo" href="./index.html"><img src="./lim-logo.png" alt="LIM Food Impact"></a>
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menuDrawer">메뉴 <span>☰</span></button>
 </div></header>
@@ -15,9 +67,14 @@
 </nav></aside>
 <main>
 <section class="hero"><div class="wrap"><div class="eyebrow">LESS IS MORE</div>
-<h1>안 드실 음식이 있다면<br>처음부터 받지 않으셔도 됩니다.</h1>
-<p class="answer">반찬을 빼거나 양을 줄이면,<br>줄어든 가치만큼 필요한 곳에 기부됩니다.</p>
-<p class="tagline">남는 곳에서, 필요한 곳으로.</p></div></section>
+<h1><span class="hero-key">안</span> 드실 음식이 있다면<br><span class="hero-key">처음</span>부터 받지 않으셔도 됩니다.</h1>
+<p class="answer">반찬을 빼거나 양을 줄이면,<br>줄어든 가치만큼 필요한 곳에 기부로 연결됩니다.</p>
+<p class="tagline">남는 곳에서, 필요한 곳으로.</p>
+<div class="lim-flow" aria-label="LESS에서 MORE로 이어지는 작은 선택">
+  <span class="flow-word">LESS</span>
+  <span class="flow-track" aria-hidden="true"><span class="flow-dot"></span></span>
+  <span class="flow-word">MORE</span>
+</div></div></section>
 
 <section class="section alt" id="stores"><div class="wrap">
 <div class="eyebrow">현재 시범운영 중</div><h2>참여 매장</h2>
@@ -36,4 +93,26 @@
 if(!b||!d)return; const set=(on)=>{document.body.classList.toggle('menu-open',on);b.setAttribute('aria-expanded',String(on));d.setAttribute('aria-hidden',String(!on));};
 b.addEventListener('click',()=>set(!document.body.classList.contains('menu-open')));
 document.querySelectorAll('[data-menu-close]').forEach(x=>x.addEventListener('click',()=>set(false)));
-document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false)});})();</script></body></html>
+document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false)});})();</script>
+<script>
+(()=>{
+  const flow=document.querySelector('.lim-flow');
+  if(!flow) return;
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){flow.classList.add('is-playing');return;}
+  let timer=null;
+  const play=()=>{
+    clearTimeout(timer);
+    flow.classList.remove('is-playing');
+    void flow.offsetWidth;
+    flow.classList.add('is-playing');
+    timer=setTimeout(()=>{if(flow.classList.contains('is-playing')) play();},4700);
+  };
+  const reset=()=>{clearTimeout(timer);flow.classList.remove('is-playing');};
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>entry.isIntersecting ? play() : reset());
+  },{threshold:.55});
+  io.observe(flow);
+})();
+</script>
+</body></html>
