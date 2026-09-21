@@ -6,7 +6,7 @@
 <title>홍제동우동국수 | LIM Food Impact</title>
 <link rel="stylesheet" href="./site.css">
 <style>
-/* 홍제동우동국수 상세 — 대문 V1 디자인 언어에 맞춘 독립 상세페이지 */
+/* 홍제동우동국수 상세 — TEST v4: 지도 순서/브랜드 식별 개선 */
 .store-page{background:#fff;color:var(--text)}
 .store-intro{background:#FFFBF4;padding:72px 0 48px}
 .store-intro .wrap{max-width:1040px}
@@ -40,10 +40,17 @@
 .visit{padding:72px 0 78px;background:#FFFBF4}
 .visit .wrap{max-width:920px}
 .visit h2{margin:8px 0 26px;color:var(--navy);font-size:clamp(32px,4vw,46px);line-height:1.2}
-.visit-row{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;padding-top:24px;border-top:1px solid #E9E0D4}
+.visit-row{padding-top:24px;border-top:1px solid #E9E0D4}
 .visit-row small{display:block;margin-bottom:6px;color:var(--blue);font-weight:850}
 .visit-row p{margin:0;color:#3C505E;font-size:17px;line-height:1.65}
-.visit-row a{display:inline-flex;align-items:center;min-height:48px;padding:12px 18px;border-radius:999px;background:var(--navy);color:#fff;text-decoration:none;font-weight:850;white-space:nowrap}
+.map-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:24px}
+.map-btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:58px;padding:12px 14px;border:1px solid #e3e9ee;border-radius:14px;background:#fff;color:#172331;text-decoration:none;font-weight:900;white-space:nowrap;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.map-brand{display:inline-flex;align-items:center;justify-content:center;min-width:58px;font-size:15px;font-weight:950;line-height:1;letter-spacing:-.02em}
+.map-btn.naver .map-brand{color:#03C75A}
+.map-btn.kakao .map-brand{min-width:34px;height:28px;padding:0 8px;border-radius:9px;background:#FEE500;color:#191919;font-size:12px}
+.map-btn.tmap .map-brand{color:#111827;font-size:16px;letter-spacing:-.04em}
+.map-label{font-size:15px}
+@media(hover:hover){.map-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(31,78,121,.12)}}
 .store-end{padding:34px 0 52px;background:#fff}
 .store-end a{color:var(--navy);font-weight:850;text-decoration:none}
 @media(max-width:720px){
@@ -51,8 +58,13 @@
  .store-grid{grid-template-columns:1fr;gap:30px}.store-photo{border-radius:18px}.store-choice{font-size:34px}.store-copy .desc{font-size:17px}
  .measure-section{padding:60px 0 66px}.measure-section h2{font-size:36px}.measure-lead{font-size:17px}
  .measure{gap:12px;margin:30px 0 24px;padding:25px 18px;border-radius:18px}.measure b{font-size:48px}.measure>span{font-size:24px}
- .evidence video{border-radius:14px}.visit{padding:58px 0 64px}.visit-row{grid-template-columns:1fr;gap:22px}.visit-row a{justify-content:center;width:100%}
+ .evidence video{border-radius:14px}.visit{padding:58px 0 64px}.map-buttons{grid-template-columns:1fr;gap:10px}.map-btn{width:100%}
 }
+</style>
+
+<style>
+/* TEST v5 — 지도 식별성 미세조정: TMAP의 첫 T만 red */
+.tmap-t{color:#E53935;font:inherit;font-weight:900}
 </style>
 </head>
 <body>
@@ -84,28 +96,28 @@
 <div class="store-copy">
 <div class="eyebrow">이 매장에서는</div>
 <p class="store-choice">“면은 조금 적게 주세요.”</p>
-<p class="desc">다 먹기 어렵다면 음식이 나오기 전에 말씀해 주세요. 모든 우동 메뉴의 기본 면은 150g이며, 적게 요청하면 75g을 제공합니다.</p>
+<p class="desc">면을 적게 드시고 싶다면<br><strong>주문할 때 말씀해 주세요.</strong></p>
 </div>
 </div></section>
 
 <section class="measure-section"><div class="wrap content">
 <div class="eyebrow">실제 확인</div>
-<h2>말로 정하지 않고<br>실제 사용하는 양을 확인했습니다.</h2>
-<p class="measure-lead">홍제동우동국수에서 실제 사용하는 1인분 면을 현장에서 확인했습니다.</p>
-<div class="measure" aria-label="기본 면 150그램에서 면 적게 75그램으로 감소">
-<div><small>기본</small><b>150g</b></div><span>→</span><div><small>면 적게</small><b>75g</b></div>
-</div>
-<p class="measure-note">손님이 “면 적게 주세요”라고 요청하면 제공되는 면이 75g 줄어듭니다.</p>
+<h2>150g → 75g</h2>
+<p class="measure-lead">실제 매장에서 측정한 1인분 기준입니다.</p>
 <details class="evidence"><summary>실제 측정 영상 보기</summary><div class="evidence-body">
-<p>현장에서 실제 사용하는 면을 측정한 영상입니다.</p>
+
 <video controls playsinline preload="metadata"><source src="./hongje_noodle_measure.mp4" type="video/mp4">영상 재생을 지원하지 않는 브라우저입니다.</video>
 </div></details>
 </div></section>
 
 <section class="visit"><div class="wrap">
 <div class="eyebrow">매장 정보</div><h2>홍제동우동국수</h2>
-<div class="visit-row"><div><small>주소</small><p>서울 서대문구 가재울미래로2<br>DMC파크뷰자이 205동 106-2호</p></div>
-<a href="https://m.place.naver.com/restaurant/1227274768/home" target="_blank" rel="noopener noreferrer">네이버지도에서 보기 →</a></div>
+<div class="visit-row"><div><small>주소</small><p>서울 서대문구 가재울미래로 2<br>DMC파크뷰자이 205동 106-2호</p></div>
+<div class="map-buttons" aria-label="지도 앱에서 홍제동우동국수 보기">
+<a class="map-btn naver" href="https://m.place.naver.com/restaurant/1227274768/home" target="_blank" rel="noopener noreferrer" aria-label="네이버지도에서 홍제동우동국수 보기"><span class="map-brand" aria-hidden="true">NAVER</span><span class="map-label">네이버지도</span></a>
+<a class="map-btn kakao" href="https://map.kakao.com/?q=%ED%99%8D%EC%A0%9C%EB%8F%99%EC%9A%B0%EB%8F%99%EA%B5%AD%EC%88%98" target="_blank" rel="noopener noreferrer" aria-label="카카오맵에서 홍제동우동국수 보기"><span class="map-brand" aria-hidden="true">kakao</span><span class="map-label">카카오맵</span></a>
+<a class="map-btn tmap" href="tmap://search?name=%ED%99%8D%EC%A0%9C%EB%8F%99%EC%9A%B0%EB%8F%99%EA%B5%AD%EC%88%98" aria-label="TMAP에서 홍제동우동국수 보기"><span class="map-brand" aria-hidden="true"><span class="tmap-t">T</span>MAP</span><span class="map-label">T맵</span></a>
+</div></div>
 </div></section>
 <section class="store-end"><div class="wrap"><a href="./index.html#stores">← 참여 매장으로 돌아가기</a></div></section>
 </main>
