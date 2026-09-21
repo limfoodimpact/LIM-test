@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>홍제동우동국수 | LIM Food Impact</title>
+<link rel="stylesheet" href="./site.css">
+<style>
+/* 홍제동우동국수 상세 — 대문 V1 디자인 언어에 맞춘 독립 상세페이지 */
+.store-page{background:#fff;color:var(--text)}
+.store-intro{background:#FFFBF4;padding:72px 0 48px}
+.store-intro .wrap{max-width:1040px}
+.store-intro h1{margin:10px 0 12px;color:var(--navy);font-size:clamp(42px,5.4vw,64px);line-height:1.12;letter-spacing:-.04em}
+.store-intro .region{margin:0;color:var(--muted);font-size:16px}
+.store-back{display:inline-block;margin-top:26px;color:var(--navy);font-size:14px;font-weight:800;text-decoration:none;border-bottom:1px solid rgba(31,78,121,.28);padding-bottom:3px}
+.store-scene{padding:68px 0 78px;background:#FFF8EF}
+.store-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(330px,.92fr);gap:58px;align-items:center}
+.store-photo{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:24px;display:block}
+.store-copy .eyebrow{margin-bottom:12px}
+.store-choice{margin:0 0 18px;color:var(--navy);font-size:clamp(30px,3.7vw,46px);font-weight:850;line-height:1.22;letter-spacing:-.035em}
+.store-copy .desc{margin:0;color:#425563;font-size:18px;line-height:1.72}
+.measure-section{padding:82px 0 88px;background:#fff}
+.measure-section .content{max-width:820px}
+.measure-section h2{margin:8px 0 18px;color:var(--navy);font-size:clamp(34px,4.5vw,52px);line-height:1.18;letter-spacing:-.035em}
+.measure-lead{margin:0;color:#526672;font-size:18px;line-height:1.72}
+.measure{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;margin:38px 0 30px;padding:30px 34px;background:#F7FAFC;border:1px solid #E2E9EE;border-radius:22px}
+.measure div{text-align:center}
+.measure small{display:block;margin-bottom:4px;color:#71828E;font-size:13px;font-weight:800}
+.measure b{display:block;color:var(--navy);font-size:clamp(42px,6vw,66px);line-height:1}
+.measure>span{color:#A8B5BE;font-size:30px}
+.measure-note{margin:0;color:#526672;font-size:16px;line-height:1.7}
+.evidence{margin-top:28px;border-top:1px solid #E3E9ED;border-bottom:1px solid #E3E9ED}
+.evidence summary{cursor:pointer;list-style:none;padding:20px 0;color:var(--navy);font-weight:850;font-size:17px}
+.evidence summary::-webkit-details-marker{display:none}
+.evidence summary::after{content:'＋';float:right;font-weight:500}
+.evidence[open] summary::after{content:'－'}
+.evidence-body{padding:0 0 26px}
+.evidence-body p{margin:0 0 16px;color:#60727E;line-height:1.7}
+.evidence video{display:block;width:100%;max-height:620px;border-radius:18px;background:#0D1A23}
+.visit{padding:72px 0 78px;background:#FFFBF4}
+.visit .wrap{max-width:920px}
+.visit h2{margin:8px 0 26px;color:var(--navy);font-size:clamp(32px,4vw,46px);line-height:1.2}
+.visit-row{padding-top:24px;border-top:1px solid #E9E0D4}
+.visit-row small{display:block;margin-bottom:6px;color:var(--blue);font-weight:850}
+.visit-row p{margin:0;color:#3C505E;font-size:17px;line-height:1.65}
+.map-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:24px}
+.map-btn{display:flex;align-items:center;justify-content:center;min-height:52px;padding:12px 14px;border:1px solid #DCE4E9;border-radius:14px;background:#fff;color:var(--navy);text-decoration:none;font-weight:850;white-space:nowrap;transition:transform .18s ease,box-shadow .18s ease}
+@media(hover:hover){.map-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(31,78,121,.08)}}
+.store-end{padding:34px 0 52px;background:#fff}
+.store-end a{color:var(--navy);font-weight:850;text-decoration:none}
+@media(max-width:720px){
+ .store-intro{padding:50px 0 38px}.store-intro h1{font-size:40px}.store-scene{padding:38px 0 58px}
+ .store-grid{grid-template-columns:1fr;gap:30px}.store-photo{border-radius:18px}.store-choice{font-size:34px}.store-copy .desc{font-size:17px}
+ .measure-section{padding:60px 0 66px}.measure-section h2{font-size:36px}.measure-lead{font-size:17px}
+ .measure{gap:12px;margin:30px 0 24px;padding:25px 18px;border-radius:18px}.measure b{font-size:48px}.measure>span{font-size:24px}
+ .evidence video{border-radius:14px}.visit{padding:58px 0 64px}.map-buttons{grid-template-columns:1fr;gap:10px}.map-btn{width:100%}
+}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="wrap header-in">
+<a class="logo" href="./index.html"><img src="./lim-logo.png" alt="LIM Food Impact"></a>
+<button class="menu-btn" type="button" aria-expanded="false" aria-controls="menuDrawer">메뉴 <span>☰</span></button>
+</div></header>
+<div class="menu-backdrop" data-menu-close></div>
+<aside class="menu-drawer" id="menuDrawer" aria-hidden="true">
+<div class="menu-top"><strong>LIM</strong><button class="menu-close" type="button" data-menu-close aria-label="메뉴 닫기">×</button></div>
+<nav class="drawer-nav" aria-label="전체 메뉴">
+<a href="./value.html"><strong>줄어든 가치</strong><span>가치는 어떻게 정하나요?</span></a>
+<a href="./donation.html"><strong>기부 내역</strong><span>얼마가 어디로 전달되었나요?</span></a>
+<a href="./index.html#stores"><strong>참여 매장</strong><span>현재 함께하는 매장</span></a>
+<a href="./apply.html"><strong>사장님 참여</strong><span>LIM 참여 신청</span></a>
+<a href="./story.html"><strong>LIM 이야기</strong><span>LIM을 시작한 이유</span></a>
+<a href="./feedback.html"><strong>궁금한 점 · 바라는 점</strong><span>질문과 의견 남기기</span></a>
+</nav></aside>
+<main class="store-page">
+<section class="store-intro"><div class="wrap">
+<div class="eyebrow">LIM 참여 매장 · 서울 서대문구</div>
+<h1>홍제동우동국수</h1>
+<p class="region">현재 시범운영 중</p>
+<a class="store-back" href="./index.html#stores">← 매장 목록으로</a>
+</div></section>
+
+<section class="store-scene"><div class="wrap store-grid">
+<img class="store-photo" src="./hongje_storefront.webp" alt="홍제동우동국수 실제 매장 외관">
+<div class="store-copy">
+<div class="eyebrow">이 매장에서는</div>
+<p class="store-choice">“면은 조금 적게 주세요.”</p>
+<p class="desc">모든 우동 메뉴의 기본 면은 150g.<br>적게 요청하면 75g을 제공합니다.</p>
+</div>
+</div></section>
+
+<section class="measure-section"><div class="wrap content">
+<div class="eyebrow">실제 확인</div>
+<h2>150g → 75g</h2>
+<p class="measure-lead">실제 매장에서 확인했습니다.</p>
+<div class="measure" aria-label="기본 면 150그램에서 면 적게 75그램으로 감소">
+<div><small>기본</small><b>150g</b></div><span>→</span><div><small>면 적게</small><b>75g</b></div>
+</div>
+<p class="measure-note"><strong>한 번의 선택으로 75g 덜 제공합니다.</strong></p>
+<details class="evidence"><summary>실제 측정 영상 보기</summary><div class="evidence-body">
+
+<video controls playsinline preload="metadata"><source src="./hongje_noodle_measure.mp4" type="video/mp4">영상 재생을 지원하지 않는 브라우저입니다.</video>
+</div></details>
+</div></section>
+
+<section class="visit"><div class="wrap">
+<div class="eyebrow">매장 정보</div><h2>홍제동우동국수</h2>
+<div class="visit-row"><div><small>주소</small><p>서울 서대문구 가재울미래로 2<br>DMC파크뷰자이 205동 106-2호</p></div>
+<div class="map-buttons" aria-label="지도 앱에서 홍제동우동국수 보기">
+<a class="map-btn" href="https://m.place.naver.com/restaurant/1227274768/home" target="_blank" rel="noopener noreferrer">네이버지도</a>
+<a class="map-btn" href="tmap://search?name=%ED%99%8D%EC%A0%9C%EB%8F%99%EC%9A%B0%EB%8F%99%EA%B5%AD%EC%88%98">T맵</a>
+<a class="map-btn" href="https://map.kakao.com/?q=%ED%99%8D%EC%A0%9C%EB%8F%99%EC%9A%B0%EB%8F%99%EA%B5%AD%EC%88%98" target="_blank" rel="noopener noreferrer">카카오맵</a>
+</div></div>
+</div></section>
+<section class="store-end"><div class="wrap"><a href="./index.html#stores">← 참여 매장으로 돌아가기</a></div></section>
+</main>
+<footer><div class="wrap foot"><span>LESS IS MORE · 남는 곳에서, 필요한 곳으로.</span><span><a href="./feedback.html">궁금한 점 · 바라는 점</a></span></div></footer>
+<script>
+(()=>{const b=document.querySelector('.menu-btn'),d=document.querySelector('.menu-drawer');if(!b||!d)return;const set=(on)=>{document.body.classList.toggle('menu-open',on);b.setAttribute('aria-expanded',String(on));d.setAttribute('aria-hidden',String(!on));};b.addEventListener('click',()=>set(!document.body.classList.contains('menu-open')));document.querySelectorAll('[data-menu-close]').forEach(x=>x.addEventListener('click',()=>set(false)));document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false)});})();
+</script>
+</body></html>
