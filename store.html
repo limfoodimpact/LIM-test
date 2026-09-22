@@ -52,7 +52,7 @@ h1{font-size:34px;margin:15px 0 10px}
 <header class="top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a><nav class="topnav"><a class="navlink" href="store.html">참여 매장</a><a class="btn primary" href="apply.html">사장님 참여</a></nav></header>
 <main>
 <section class="panel">
- <div class="head"><span class="badge">참여 매장 체크</span><h1>홍제동우동국수</h1><div class="guide">손님 요청이 있을 때 해당 항목을<br>한 번만 눌러주세요.</div><div class="today" id="todayLabel"></div></div>
+ <div class="head"><span class="badge">참여 매장 체크</span><h1 id="storeName">매장 확인 중...</h1><div class="guide">손님 요청이 있을 때 해당 항목을<br>한 번만 눌러주세요.</div><div class="today" id="todayLabel"></div></div>
  <div class="cards">
   <div class="card"><div class="label">메인 음식 양 줄이기</div><div class="number" id="mainCount">0</div><button class="plus" id="mainPlus">+1</button><button class="minus" id="mainMinus">−1</button></div>
   <div class="card"><div class="label">반찬 줄이기 · 빼기</div><div class="number" id="sideCount">0</div><button class="plus" id="sidePlus">+1</button><button class="minus" id="sideMinus">−1</button></div>
@@ -62,11 +62,13 @@ h1{font-size:34px;margin:15px 0 10px}
 <script>
 const SUPABASE_URL = 'https://slrbqhygpexksvduluev.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_K9fILZLweR1Qi8IBQyNEmA_OMV1F4yb';
-const STORE_CODE = 'hongje';
+const params = new URLSearchParams(location.search);
+const STORE_CODE = (params.get('store') || '').trim();
 
 let mainCount = 0, sideCount = 0;
 const m = document.getElementById('mainCount');
 const s = document.getElementById('sideCount');
+const storeNameEl = document.getElementById('storeName');
 
 function localDateString(){
   const now = new Date();
@@ -77,13 +79,7 @@ function localDateString(){
 }
 const TODAY = localDateString();
 
-function dayRange(){
-  const [y,mo,d] = TODAY.split('-').map(Number);
-  return {
-    start:new Date(y,mo-1,d,0,0,0,0).toISOString(),
-    end:new Date(y,mo-1,d+1,0,0,0,0).toISOString()
-  };
-}
+
 function draw(){ m.textContent=mainCount; s.textContent=sideCount; }
 document.getElementById('todayLabel').textContent = `${TODAY} 오늘 기록`;
 
@@ -114,8 +110,7 @@ async function deleteLatestCheck(checkType, button){
   if(current<=0||button.disabled) return;
   button.disabled=true;
   try{
-    const r=dayRange();
-    const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${STORE_CODE}&check_type=eq.${checkType}&created_at=gte.${encodeURIComponent(r.start)}&created_at=lt.${encodeURIComponent(r.end)}&select=id&order=created_at.desc,id.desc&limit=1`;
+    const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${encodeURIComponent(STORE_CODE)}&check_type=eq.${encodeURIComponent(checkType)}&occurred_date=eq.${TODAY}&select=id&order=created_at.desc,id.desc&limit=1`;
     const find=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
     if(!find.ok) throw new Error(await find.text());
     const rows=await find.json();
@@ -138,8 +133,7 @@ document.getElementById('sideMinus').onclick=function(){deleteLatestCheck('side_
 
 async function loadCounts(){
   try{
-    const r=dayRange();
-    const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${STORE_CODE}&created_at=gte.${encodeURIComponent(r.start)}&created_at=lt.${encodeURIComponent(r.end)}&select=check_type`;
+    const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${encodeURIComponent(STORE_CODE)}&occurred_date=eq.${TODAY}&select=check_type`;
     const response=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
     if(!response.ok) throw new Error(await response.text());
     const rows=await response.json();
@@ -148,7 +142,35 @@ async function loadCounts(){
     draw();
   }catch(error){console.error(error);}
 }
-loadCounts();
+async function loadStore(){
+  if(!STORE_CODE){
+    storeNameEl.textContent='매장 주소를 확인해주세요';
+    document.querySelectorAll('.plus,.minus').forEach(b=>b.disabled=true);
+    return false;
+  }
+  try{
+    const url=`${SUPABASE_URL}/rest/v1/stores?store_code=eq.${encodeURIComponent(STORE_CODE)}&status=eq.active&select=store_name&limit=1`;
+    const response=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
+    if(!response.ok) throw new Error(await response.text());
+    const rows=await response.json();
+    if(!rows.length){
+      storeNameEl.textContent='등록되지 않은 매장입니다';
+      document.querySelectorAll('.plus,.minus').forEach(b=>b.disabled=true);
+      return false;
+    }
+    storeNameEl.textContent=rows[0].store_name;
+    return true;
+  }catch(error){
+    console.error(error);
+    storeNameEl.textContent='매장 정보를 불러오지 못했습니다';
+    document.querySelectorAll('.plus,.minus').forEach(b=>b.disabled=true);
+    return false;
+  }
+}
+
+(async function init(){
+  if(await loadStore()) await loadCounts();
+})();
 </script>
 
 <script>
