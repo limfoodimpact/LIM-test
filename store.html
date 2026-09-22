@@ -21,6 +21,7 @@ main{padding:48px 18px 70px}
 .badge{display:inline-block;background:var(--pale);color:var(--navy);border-radius:999px;padding:8px 14px;font-weight:800;font-size:15px}
 h1{font-size:34px;margin:15px 0 10px}
 .guide{font-size:16px;color:var(--muted);line-height:1.55}
+.today{margin-top:10px;font-size:14px;font-weight:800;color:var(--navy)}
 .cards{display:grid;gap:16px}
 .card{border:1px solid var(--line);border-radius:20px;padding:22px}
 .label{font-size:21px;font-weight:850;color:var(--navy);text-align:center}
@@ -51,7 +52,7 @@ h1{font-size:34px;margin:15px 0 10px}
 <header class="top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a><nav class="topnav"><a class="navlink" href="store.html">참여 매장</a><a class="btn primary" href="apply.html">사장님 참여</a></nav></header>
 <main>
 <section class="panel">
- <div class="head"><span class="badge">참여 매장 체크</span><h1>홍제동우동국수</h1><div class="guide">손님 요청이 있을 때 해당 항목을<br>한 번만 눌러주세요.</div></div>
+ <div class="head"><span class="badge">참여 매장 체크</span><h1>홍제동우동국수</h1><div class="guide">손님 요청이 있을 때 해당 항목을<br>한 번만 눌러주세요.</div><div class="today" id="todayLabel"></div></div>
  <div class="cards">
   <div class="card"><div class="label">메인 음식 양 줄이기</div><div class="number" id="mainCount">0</div><button class="plus" id="mainPlus">+1</button><button class="minus" id="mainMinus">−1</button></div>
   <div class="card"><div class="label">반찬 줄이기 · 빼기</div><div class="number" id="sideCount">0</div><button class="plus" id="sidePlus">+1</button><button class="minus" id="sideMinus">−1</button></div>
@@ -67,127 +68,85 @@ let mainCount = 0, sideCount = 0;
 const m = document.getElementById('mainCount');
 const s = document.getElementById('sideCount');
 
-function draw(){
-  m.textContent = mainCount;
-  s.textContent = sideCount;
+function localDateString(){
+  const now = new Date();
+  const y = now.getFullYear();
+  const mo = String(now.getMonth()+1).padStart(2,'0');
+  const d = String(now.getDate()).padStart(2,'0');
+  return `${y}-${mo}-${d}`;
 }
+const TODAY = localDateString();
+
+function dayRange(){
+  const [y,mo,d] = TODAY.split('-').map(Number);
+  return {
+    start:new Date(y,mo-1,d,0,0,0,0).toISOString(),
+    end:new Date(y,mo-1,d+1,0,0,0,0).toISOString()
+  };
+}
+function draw(){ m.textContent=mainCount; s.textContent=sideCount; }
+document.getElementById('todayLabel').textContent = `${TODAY} 오늘 기록`;
 
 async function saveCheck(checkType, button){
-  if (button.disabled) return;
-  button.disabled = true;
-
-  try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/store_checks`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({
-        store_code: STORE_CODE,
-        check_type: checkType
-      })
-    });
-
-    if (!response.ok) {
-      const detail = await response.text();
-      throw new Error(`Supabase ${response.status}: ${detail}`);
-    }
-
-    if (checkType === 'main_reduce') mainCount++;
-    if (checkType === 'side_reduce') sideCount++;
-    draw();
-  } catch (error) {
-    console.error(error);
-    alert('저장되지 않았습니다. 인터넷 연결 후 다시 눌러주세요.');
-  } finally {
-    button.disabled = false;
-  }
-}
-
-document.getElementById('mainPlus').onclick = function(){
-  saveCheck('main_reduce', this);
-};
-document.getElementById('sidePlus').onclick = function(){
-  saveCheck('side_reduce', this);
-};
-
-async function deleteLatestCheck(checkType, button){
-  const currentCount = checkType === 'main_reduce' ? mainCount : sideCount;
-  if (currentCount <= 0 || button.disabled) return;
-
-  button.disabled = true;
-  try {
-    const findResponse = await fetch(
-      `${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${STORE_CODE}&check_type=eq.${checkType}&select=id&order=created_at.desc,id.desc&limit=1`,
-      {
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`
-        }
-      }
-    );
-
-    if (!findResponse.ok) {
-      const detail = await findResponse.text();
-      throw new Error(`Supabase select ${findResponse.status}: ${detail}`);
-    }
-
-    const rows = await findResponse.json();
-    if (!rows.length) return;
-
-    const deleteResponse = await fetch(
-      `${SUPABASE_URL}/rest/v1/store_checks?id=eq.${rows[0].id}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Prefer': 'return=minimal'
-        }
-      }
-    );
-
-    if (!deleteResponse.ok) {
-      const detail = await deleteResponse.text();
-      throw new Error(`Supabase delete ${deleteResponse.status}: ${detail}`);
-    }
-
-    if (checkType === 'main_reduce') mainCount--;
-    if (checkType === 'side_reduce') sideCount--;
-    draw();
-  } catch (error) {
-    console.error(error);
-    alert('취소되지 않았습니다. 잠시 후 다시 시도해주세요.');
-  } finally {
-    button.disabled = false;
-  }
-}
-
-document.getElementById('mainMinus').onclick = function(){
-  deleteLatestCheck('main_reduce', this);
-};
-document.getElementById('sideMinus').onclick = function(){
-  deleteLatestCheck('side_reduce', this);
-};
-
-async function loadCounts(){
+  if(button.disabled) return;
+  button.disabled=true;
   try{
-    const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${STORE_CODE}&select=check_type`,
-      { headers:{ 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-    );
+    const response=await fetch(`${SUPABASE_URL}/rest/v1/store_checks`,{
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({store_code:STORE_CODE,check_type:checkType})
+    });
     if(!response.ok) throw new Error(await response.text());
-
-    const rows = await response.json();
-    mainCount = rows.filter(row => row.check_type === 'main_reduce').length;
-    sideCount = rows.filter(row => row.check_type === 'side_reduce').length;
+    if(checkType==='main_reduce') mainCount++;
+    if(checkType==='side_reduce') sideCount++;
     draw();
   }catch(error){
     console.error(error);
-  }
+    alert('저장되지 않았습니다. 인터넷 연결 후 다시 눌러주세요.');
+  }finally{ button.disabled=false; }
+}
+
+document.getElementById('mainPlus').onclick=function(){saveCheck('main_reduce',this)};
+document.getElementById('sidePlus').onclick=function(){saveCheck('side_reduce',this)};
+
+async function deleteLatestCheck(checkType, button){
+  const current=checkType==='main_reduce'?mainCount:sideCount;
+  if(current<=0||button.disabled) return;
+  button.disabled=true;
+  try{
+    const r=dayRange();
+    const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${STORE_CODE}&check_type=eq.${checkType}&created_at=gte.${encodeURIComponent(r.start)}&created_at=lt.${encodeURIComponent(r.end)}&select=id&order=created_at.desc,id.desc&limit=1`;
+    const find=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
+    if(!find.ok) throw new Error(await find.text());
+    const rows=await find.json();
+    if(!rows.length) return;
+    const del=await fetch(`${SUPABASE_URL}/rest/v1/store_checks?id=eq.${rows[0].id}`,{
+      method:'DELETE',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal'}
+    });
+    if(!del.ok) throw new Error(await del.text());
+    if(checkType==='main_reduce') mainCount--;
+    if(checkType==='side_reduce') sideCount--;
+    draw();
+  }catch(error){
+    console.error(error);
+    alert('취소되지 않았습니다. 잠시 후 다시 시도해주세요.');
+  }finally{button.disabled=false;}
+}
+document.getElementById('mainMinus').onclick=function(){deleteLatestCheck('main_reduce',this)};
+document.getElementById('sideMinus').onclick=function(){deleteLatestCheck('side_reduce',this)};
+
+async function loadCounts(){
+  try{
+    const r=dayRange();
+    const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${STORE_CODE}&created_at=gte.${encodeURIComponent(r.start)}&created_at=lt.${encodeURIComponent(r.end)}&select=check_type`;
+    const response=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
+    if(!response.ok) throw new Error(await response.text());
+    const rows=await response.json();
+    mainCount=rows.filter(x=>x.check_type==='main_reduce').length;
+    sideCount=rows.filter(x=>x.check_type==='side_reduce').length;
+    draw();
+  }catch(error){console.error(error);}
 }
 loadCounts();
 </script>
