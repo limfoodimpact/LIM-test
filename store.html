@@ -112,31 +112,45 @@ const params = new URLSearchParams(location.search);
 const STORE_CODE = (params.get('store') || '').trim();
 
 let mainCount = 0, sideCount = 0;
+let businessDayCutoff = '03:00:00';
+let BUSINESS_DATE = '';
 const m = document.getElementById('mainCount');
 const s = document.getElementById('sideCount');
 const storeNameEl = document.getElementById('storeName');
 
-function localDateString(){
-  const now = new Date();
-  const y = now.getFullYear();
-  const mo = String(now.getMonth()+1).padStart(2,'0');
-  const d = String(now.getDate()).padStart(2,'0');
+function formatLocalDate(date){
+  const y = date.getFullYear();
+  const mo = String(date.getMonth()+1).padStart(2,'0');
+  const d = String(date.getDate()).padStart(2,'0');
   return `${y}-${mo}-${d}`;
 }
-const TODAY = localDateString();
 
+function getBusinessDate(cutoff){
+  const now = new Date();
+  const parts = (cutoff || '03:00:00').split(':').map(Number);
+  const cutoffMinutes = (parts[0] || 0) * 60 + (parts[1] || 0);
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
+  const business = new Date(now);
+  if(nowMinutes < cutoffMinutes) business.setDate(business.getDate() - 1);
+  return formatLocalDate(business);
+}
 
 function draw(){ m.textContent=mainCount; s.textContent=sideCount; }
-document.getElementById('todayLabel').textContent = `${TODAY} 오늘 기록`;
+
+function updateBusinessDate(){
+  BUSINESS_DATE = getBusinessDate(businessDayCutoff);
+  document.getElementById('todayLabel').textContent = `${BUSINESS_DATE} 영업일 기록`;
+}
 
 async function saveCheck(checkType, button){
+  updateBusinessDate();
   if(button.disabled) return;
   button.disabled=true;
   try{
     const response=await fetch(`${SUPABASE_URL}/rest/v1/store_checks`,{
       method:'POST',
       headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},
-      body:JSON.stringify({store_code:STORE_CODE,check_type:checkType})
+      body:JSON.stringify({store_code:STORE_CODE,check_type:checkType,occurred_date:BUSINESS_DATE})
     });
     if(!response.ok) throw new Error(await response.text());
     if(checkType==='main_reduce') mainCount++;
@@ -152,11 +166,12 @@ document.getElementById('mainPlus').onclick=function(){saveCheck('main_reduce',t
 document.getElementById('sidePlus').onclick=function(){saveCheck('side_reduce',this)};
 
 async function deleteLatestCheck(checkType, button){
+  updateBusinessDate();
   const current=checkType==='main_reduce'?mainCount:sideCount;
   if(current<=0||button.disabled) return;
   button.disabled=true;
   try{
-    const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${encodeURIComponent(STORE_CODE)}&check_type=eq.${encodeURIComponent(checkType)}&occurred_date=eq.${TODAY}&select=id&order=created_at.desc,id.desc&limit=1`;
+    const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${encodeURIComponent(STORE_CODE)}&check_type=eq.${encodeURIComponent(checkType)}&occurred_date=eq.${BUSINESS_DATE}&select=id&order=created_at.desc,id.desc&limit=1`;
     const find=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
     if(!find.ok) throw new Error(await find.text());
     const rows=await find.json();
@@ -178,8 +193,9 @@ document.getElementById('mainMinus').onclick=function(){deleteLatestCheck('main_
 document.getElementById('sideMinus').onclick=function(){deleteLatestCheck('side_reduce',this)};
 
 async function loadCounts(){
+  updateBusinessDate();
   try{
-    const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${encodeURIComponent(STORE_CODE)}&occurred_date=eq.${TODAY}&select=check_type`;
+    const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${encodeURIComponent(STORE_CODE)}&occurred_date=eq.${BUSINESS_DATE}&select=check_type`;
     const response=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
     if(!response.ok) throw new Error(await response.text());
     const rows=await response.json();
@@ -195,7 +211,7 @@ async function loadStore(){
     return false;
   }
   try{
-    const url=`${SUPABASE_URL}/rest/v1/stores?store_code=eq.${encodeURIComponent(STORE_CODE)}&status=eq.active&select=store_name&limit=1`;
+    const url=`${SUPABASE_URL}/rest/v1/stores?store_code=eq.${encodeURIComponent(STORE_CODE)}&status=eq.active&select=store_name,business_day_cutoff&limit=1`;
     const response=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
     if(!response.ok) throw new Error(await response.text());
     const rows=await response.json();
@@ -205,6 +221,11 @@ async function loadStore(){
       return false;
     }
     storeNameEl.textContent=rows[0].store_name;
+    businessDayCutoff=rows[0].business_day_cutoff || '03:00:00';
+    updateBusinessDate();
+    const [by,bm] = BUSINESS_DATE.split('-').map(Number);
+    calendarYear = by;
+    calendarMonth = bm - 1;
     return true;
   }catch(error){
     console.error(error);
@@ -260,7 +281,7 @@ async function loadCalendar(){
     const c=byDay[key]||{main:0,side:0};
     const hasRecord=(c.main+c.side)>0;
     const el=document.createElement('div');
-    el.className='day'+(key===TODAY?' today':'')+(hasRecord?' has-record':'');
+    el.className='day'+(key===BUSINESS_DATE?' today':'')+(hasRecord?' has-record':'');
     el.innerHTML=hasRecord
       ? `<div class="date-num">${d}</div><div class="day-count">양 <b>${c.main}</b><br>반찬 <b>${c.side}</b></div>`
       : `<div class="date-num">${d}</div>`;
