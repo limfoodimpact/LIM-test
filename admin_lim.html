@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>LIM 이름 공개 관리</title>
+  <style>
+    :root{
+      --navy:#1F4E79;--blue:#3E7CB1;--gold:#E8C97A;--cream:#FFF6E9;
+      --gray:#F2F5F8;--ink:#263746;--muted:#687887;--line:#DCE5EC;
+      --red:#9D3F3D;--green:#267258;--white:#fff;
+    }
+    *{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    body{margin:0;background:#F6F8FA;color:var(--ink);font-family:"Pretendard","Malgun Gothic",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6;word-break:keep-all}
+    button,input,select{font:inherit}
+    button{touch-action:manipulation}
+    .wrap{width:min(1060px,calc(100% - 28px));margin:auto;padding:24px 0 64px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+    .brand{display:inline-flex;align-items:center;min-height:44px;text-decoration:none}
+    .brand img{display:block;width:auto;height:34px}
+    .top-actions{display:flex;gap:8px}
+    .quiet{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 15px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--navy);font-weight:850;text-decoration:none;cursor:pointer}
+    .hero{padding:27px 30px;border-radius:22px;background:linear-gradient(150deg,var(--navy),#173A5B);color:#fff}
+    .hero small{color:var(--gold);font-weight:900;letter-spacing:.13em}
+    .hero h1{margin:7px 0 5px;font-size:clamp(27px,5vw,38px);line-height:1.3}
+    .hero p{margin:0;color:#D8E6EF}
+    .panel{margin-top:18px;padding:24px;border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:0 12px 34px rgba(31,78,121,.06)}
+    .login-panel{max-width:580px;margin-left:auto;margin-right:auto}
+    h2{margin:0;color:var(--navy);font-size:23px}
+    .lead{margin:5px 0 20px;color:var(--muted)}
+    label{display:block;margin:16px 0 7px;color:var(--navy);font-weight:900}
+    input,select{width:100%;min-height:50px;padding:12px 13px;border:1px solid #C8D4DD;border-radius:11px;background:#fff;font-size:16px;outline:none}
+    input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(62,124,177,.13)}
+    .primary{width:100%;min-height:52px;margin-top:20px;border:0;border-radius:999px;background:var(--gold);color:var(--navy);font-weight:900;cursor:pointer}
+    button:disabled{opacity:.55;cursor:not-allowed}
+    .status{min-height:24px;margin:12px 0 0;font-weight:750}
+    .error{color:var(--red)}
+    #console{display:none}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}
+    .stat{min-height:90px;padding:15px;border:1px solid var(--line);border-radius:15px;background:#fff;color:var(--muted);font-size:13px;text-align:left;cursor:pointer}
+    .stat strong{display:block;color:var(--navy);font-size:28px;line-height:1.25}
+    .stat.active{border-color:var(--navy);box-shadow:0 0 0 2px rgba(31,78,121,.12)}
+    .stat.urgent strong{color:var(--red)}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .refresh{flex:0 0 auto;min-height:44px;padding:9px 15px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--navy);font-weight:850;cursor:pointer}
+    .guide{margin:18px 0 0;padding:12px 14px;border-radius:12px;background:var(--cream);color:#67572F;font-size:14px}
+    .entries{display:grid;gap:11px;margin-top:17px}
+    .entry{display:grid;grid-template-columns:minmax(180px,1.35fr) minmax(120px,.7fr) minmax(180px,1fr) auto;gap:14px;align-items:center;padding:17px;border:1px solid var(--line);border-radius:16px;background:#fff}
+    .entry-name{color:var(--navy);font-size:18px;font-weight:900}
+    .entry-id{color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+    .badge{display:inline-flex;width:max-content;align-items:center;min-height:31px;padding:5px 10px;border-radius:999px;background:var(--gray);color:var(--navy);font-size:12px;font-weight:900}
+    .badge.pending{background:#FFF4D6;color:#765A12}
+    .badge.approved{background:#E4F3EC;color:var(--green)}
+    .badge.deletion_requested{background:#FBE8E7;color:var(--red)}
+    .badge.rejected{background:#ECEFF2;color:#5F6870}
+    .date{color:var(--muted);font-size:13px}
+    .entry-actions{display:flex;gap:6px;justify-content:flex-end}
+    .action{min-height:42px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--navy);font-weight:900;white-space:nowrap;cursor:pointer}
+    .action.approve{border-color:var(--gold);background:var(--gold)}
+    .action.danger{color:var(--red)}
+    .empty{padding:34px;border:1px dashed #C8D4DD;border-radius:16px;background:#fff;color:var(--muted);text-align:center}
+    .privacy{margin:17px 0 0;color:var(--muted);font-size:13px}
+    .privacy strong{color:var(--navy)}
+    .record-form{display:grid;grid-template-columns:1.4fr 1fr .8fr .8fr;gap:12px;align-items:end;margin-top:14px}
+    .record-form label{margin:0 0 7px}
+    .record-form .primary{margin:0;min-height:50px}
+    .record-help{margin:8px 0 0;color:var(--muted);font-size:13px}
+    .existing-warning{margin-top:12px;padding:12px 14px;border-radius:12px;background:#FFF4D6;color:#765A12;font-weight:800}
+    @media(max-width:760px){
+      .wrap{width:min(100% - 20px,1060px);padding-top:15px}
+      .top{align-items:flex-start}
+      .top-actions{display:grid}
+      .quiet{padding-left:12px;padding-right:12px}
+      .hero{padding:24px 19px}
+      .panel{padding:20px 16px}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .stat{min-height:82px}
+      .entry{grid-template-columns:1fr;gap:9px}
+      .record-form{grid-template-columns:1fr}
+      .entry-actions{justify-content:stretch;margin-top:3px}
+      .action{flex:1}
+      .date{font-size:12px}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <a class="brand" href="./index.html" aria-label="LIM Food Impact 홈으로"><img src="./lim-logo.png" alt="LIM Food Impact"></a>
+      <div class="top-actions">
+        <a class="quiet" href="./admin_stores.html">매장 참여 문의</a>
+        <a class="quiet" href="./join_lim.html">공개 명단 보기</a>
+        <button class="quiet" id="logoutButton" type="button" hidden>로그아웃</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <small>LIM OPERATOR</small>
+      <h1>이름 공개 관리</h1>
+      <p>신청을 확인하고 공개 상태를 관리합니다.</p>
+    </section>
+
+    <section class="panel login-panel" id="loginPanel" aria-labelledby="loginTitle">
+      <h2 id="loginTitle">운영자 로그인</h2>
+      <p class="lead">등록된 운영자 계정만 기록을 확인할 수 있습니다.</p>
+      <form id="loginForm">
+        <label for="email">이메일</label>
+        <input id="email" type="email" autocomplete="username" required>
+        <label for="password">비밀번호</label>
+        <input id="password" type="password" autocomplete="current-password" required>
+        <button class="primary" id="loginButton" type="submit">로그인</button>
+        <p class="status" id="loginStatus" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="console" aria-labelledby="consoleTitle">
+      <div class="stats" aria-label="기록 상태별 보기">
+        <button class="stat" type="button" data-filter="pending">승인 대기<strong id="pendingCount">0</strong></button>
+        <button class="stat urgent" type="button" data-filter="deletion_requested">철회 요청<strong id="deletionCount">0</strong></button>
+        <button class="stat" type="button" data-filter="approved">공개 중<strong id="approvedCount">0</strong></button>
+        <button class="stat active" type="button" data-filter="all">전체 기록<strong id="totalCount">0</strong></button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div><h2>매장 과거 기록 입력</h2><p class="lead">종이로 작성한 기록을 실제 영업일 기준으로 입력합니다.</p></div>
+        </div>
+        <form id="storeRecordForm">
+          <div class="record-form">
+            <div>
+              <label for="recordStore">매장</label>
+              <select id="recordStore" required><option value="">매장을 불러오는 중...</option></select>
+            </div>
+            <div>
+              <label for="recordDate">영업일</label>
+              <input id="recordDate" type="date" required>
+            </div>
+            <div>
+              <label for="recordMain">양 줄이기</label>
+              <input id="recordMain" type="number" min="0" step="1" value="0" required>
+            </div>
+            <div>
+              <label for="recordSide">반찬 줄이기</label>
+              <input id="recordSide" type="number" min="0" step="1" value="0" required>
+            </div>
+          </div>
+          <button class="primary" id="recordSaveButton" type="submit">기록 저장</button>
+          <p class="record-help">입력한 건수는 DB에 각각의 개별 기록으로 저장됩니다. 이미 같은 매장·영업일 기록이 있으면 중복 저장하지 않습니다.</p>
+          <p class="status" id="recordStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div><h2 id="consoleTitle">신청 기록</h2><p class="lead" id="listDescription">전체 기록을 보고 있습니다.</p></div>
+          <button class="refresh" id="refreshButton" type="button">새로고침</button>
+        </div>
+        <p class="guide">철회 요청과 승인 대기 기록을 먼저 확인해 주세요.</p>
+        <p class="status" id="consoleStatus" role="status" aria-live="polite"></p>
+        <div class="entries" id="entries"><div class="empty">기록을 불러오는 중입니다.</div></div>
+        <p class="privacy"><strong>운영 원칙:</strong> 동의와 이름을 확인한 뒤 승인합니다. 철회 요청이 들어온 이름은 공개 명단에서 먼저 제외되며, 운영자가 확인한 뒤 완전히 삭제합니다.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+  (()=>{
+    'use strict';
+    const BASE='https://slrbqhygpexksvduluev.supabase.co';
+    const KEY='sb_publishable_K9fILZLweR1Qi8IBQyNEmA_OMV1F4yb';
+    let token=sessionStorage.getItem('lim_admin_token')||'';
+    let records=[];
+    let filter='all';
+    const $=selector=>document.querySelector(selector);
+    const loginPanel=$('#loginPanel');
+    const consolePanel=$('#console');
+    const loginStatus=$('#loginStatus');
+    const consoleStatus=$('#consoleStatus');
+    const entries=$('#entries');
+    const logout=$('#logoutButton');
+    const refresh=$('#refreshButton');
+    const recordForm=$('#storeRecordForm');
+    const recordStore=$('#recordStore');
+    const recordDate=$('#recordDate');
+    const recordMain=$('#recordMain');
+    const recordSide=$('#recordSide');
+    const recordStatus=$('#recordStatus');
+    const recordSaveButton=$('#recordSaveButton');
+    const filterButtons=[...document.querySelectorAll('[data-filter]')];
+    const setStatus=(element,message,error=false)=>{element.textContent=message;element.classList.toggle('error',error)};
+    const formatDate=value=>value?new Intl.DateTimeFormat('ko-KR',{dateStyle:'medium',timeStyle:'short'}).format(new Date(value)):'—';
+    const labels={pending:'승인 대기',approved:'공개 중',deletion_requested:'철회 요청',rejected:'보류',deleted:'삭제'};
+    const descriptions={all:'전체 기록을 보고 있습니다.',pending:'승인 대기 기록을 보고 있습니다.',approved:'현재 공개 중인 이름입니다.',deletion_requested:'공개 철회를 요청한 기록입니다.'};
+    const priority={deletion_requested:0,pending:1,approved:2,rejected:3};
+
+    async function authLogin(email,password){
+      const response=await fetch(`${BASE}/auth/v1/token?grant_type=password`,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+      const data=await response.json();
+      if(!response.ok)throw new Error(data.error_description||data.msg||'로그인하지 못했습니다.');
+      return data.access_token;
+    }
+
+    async function rpc(name,body={}){
+      const response=await fetch(`${BASE}/rest/v1/rpc/${name}`,{method:'POST',headers:{apikey:KEY,Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify(body)});
+      const raw=await response.text();
+      let data=raw;
+      try{data=raw?JSON.parse(raw):null}catch(_){}
+      if(!response.ok){
+        if(response.status===401){signOut();throw new Error('로그인이 만료되었습니다. 다시 로그인해 주세요.')}
+        throw new Error(data?.message||'요청을 처리하지 못했습니다.');
+      }
+      return data;
+    }
+
+    async function authGet(path){
+      const response=await fetch(`${BASE}/rest/v1/${path}`,{headers:{apikey:KEY,Authorization:`Bearer ${token}`}});
+      const raw=await response.text();
+      let data=raw;
+      try{data=raw?JSON.parse(raw):null}catch(_){}
+      if(!response.ok){
+        if(response.status===401){signOut();throw new Error('로그인이 만료되었습니다. 다시 로그인해 주세요.')}
+        throw new Error(data?.message||'데이터를 불러오지 못했습니다.');
+      }
+      return data;
+    }
+
+    async function loadStores(){
+      const stores=await authGet('stores?status=eq.active&select=store_code,store_name&order=store_name.asc');
+      recordStore.replaceChildren();
+      const first=document.createElement('option');
+      first.value='';first.textContent='매장을 선택하세요';
+      recordStore.append(first);
+      (Array.isArray(stores)?stores:[]).forEach(store=>{
+        const option=document.createElement('option');
+        option.value=store.store_code;
+        option.textContent=store.store_name;
+        recordStore.append(option);
+      });
+    }
+
+    function signOut(){
+      token='';records=[];
+      sessionStorage.removeItem('lim_admin_token');
+      consolePanel.style.display='none';
+      loginPanel.style.display='block';
+      logout.hidden=true;
+      $('#password').value='';
+    }
+
+    async function enterConsole(){
+      const allowed=await rpc('is_lim_admin');
+      if(allowed!==true){signOut();throw new Error('이 계정은 LIM 운영자로 등록되지 않았습니다.')}
+      loginPanel.style.display='none';
+      consolePanel.style.display='block';
+      logout.hidden=false;
+      await Promise.all([loadRecords(),loadStores()]);
+    }
+
+    function updateStats(){
+      $('#pendingCount').textContent=records.filter(x=>x.status==='pending').length;
+      $('#approvedCount').textContent=records.filter(x=>x.status==='approved').length;
+      $('#deletionCount').textContent=records.filter(x=>x.status==='deletion_requested').length;
+      $('#totalCount').textContent=records.length;
+    }
+
+    function actionButton(label,action,kind=''){
+      const button=document.createElement('button');
+      button.type='button';
+      button.className=`action ${kind}`.trim();
+      button.textContent=label;
+      button.dataset.action=action;
+      return button;
+    }
+
+    function sortedRecords(source){
+      return [...source].sort((a,b)=>{
+        const state=(priority[a.status]??9)-(priority[b.status]??9);
+        if(state!==0)return state;
+        return new Date(b.created_at)-new Date(a.created_at);
+      });
+    }
+
+    function render(){
+      entries.replaceChildren();
+      const source=filter==='all'?records:records.filter(record=>record.status===filter);
+      const list=sortedRecords(source);
+      $('#listDescription').textContent=descriptions[filter]||'선택한 기록을 보고 있습니다.';
+      if(!list.length){
+        const empty=document.createElement('div');
+        empty.className='empty';
+        empty.textContent='해당 상태의 기록이 없습니다.';
+        entries.append(empty);
+        return;
+      }
+      list.forEach(record=>{
+        const row=document.createElement('article');
+        row.className='entry';
+        row.dataset.id=record.public_id;
+        const who=document.createElement('div');
+        const name=document.createElement('div');
+        name.className='entry-name';
+        name.textContent=record.display_name;
+        const id=document.createElement('div');
+        id.className='entry-id';
+        id.textContent=record.public_id;
+        who.append(name,id);
+        const state=document.createElement('span');
+        state.className=`badge ${record.status}`;
+        state.textContent=labels[record.status]||record.status;
+        const date=document.createElement('div');
+        date.className='date';
+        date.textContent=`신청 ${formatDate(record.created_at)}`;
+        const actions=document.createElement('div');
+        actions.className='entry-actions';
+        if(record.status==='pending')actions.append(actionButton('공개 승인','approve','approve'),actionButton('보류','reject','danger'));
+        else if(record.status==='approved')actions.append(actionButton('공개 중지','hide','danger'));
+        else if(record.status==='rejected')actions.append(actionButton('공개 승인','approve','approve'),actionButton('완전 삭제','delete','danger'));
+        else if(record.status==='deletion_requested')actions.append(actionButton('완전 삭제','delete','danger'));
+        row.append(who,state,date,actions);
+        entries.append(row);
+      });
+    }
+
+    async function loadRecords(){
+      refresh.disabled=true;
+      setStatus(consoleStatus,'기록을 불러오는 중입니다…');
+      try{
+        const data=await rpc('get_admin_lim_entries');
+        records=Array.isArray(data)?data:[];
+        updateStats();render();setStatus(consoleStatus,'');
+      }catch(error){setStatus(consoleStatus,error.message,true)}
+      finally{refresh.disabled=false}
+    }
+
+    function selectFilter(next){
+      filter=next;
+      filterButtons.forEach(button=>button.classList.toggle('active',button.dataset.filter===filter));
+      render();
+    }
+
+    $('#loginForm').addEventListener('submit',async event=>{
+      event.preventDefault();
+      const button=$('#loginButton');
+      button.disabled=true;
+      setStatus(loginStatus,'로그인하고 있습니다…');
+      try{
+        token=await authLogin($('#email').value.trim(),$('#password').value);
+        sessionStorage.setItem('lim_admin_token',token);
+        await enterConsole();setStatus(loginStatus,'');
+      }catch(error){setStatus(loginStatus,error.message,true)}
+      finally{button.disabled=false}
+    });
+
+    recordForm.addEventListener('submit',async event=>{
+      event.preventDefault();
+      const storeCode=recordStore.value;
+      const occurredDate=recordDate.value;
+      const mainCount=Number(recordMain.value);
+      const sideCount=Number(recordSide.value);
+
+      if(!storeCode||!occurredDate){
+        setStatus(recordStatus,'매장과 영업일을 선택해 주세요.',true);return;
+      }
+      if(!Number.isInteger(mainCount)||!Number.isInteger(sideCount)||mainCount<0||sideCount<0){
+        setStatus(recordStatus,'건수는 0 이상의 정수로 입력해 주세요.',true);return;
+      }
+      if(mainCount===0&&sideCount===0){
+        setStatus(recordStatus,'입력할 기록이 없습니다.',true);return;
+      }
+
+      recordSaveButton.disabled=true;
+      setStatus(recordStatus,'기록을 저장하고 있습니다…');
+      try{
+        const result=await rpc('admin_add_store_checks',{
+          p_store_code:storeCode,
+          p_occurred_date:occurredDate,
+          p_main_count:mainCount,
+          p_side_count:sideCount
+        });
+
+        if(result?.success===false&&result?.reason==='existing_records'){
+          setStatus(
+            recordStatus,
+            `이미 이 영업일에 기록이 있습니다. 양 ${result.existing_main||0}건 · 반찬 ${result.existing_side||0}건. 기존 기록을 먼저 확인해 주세요.`,
+            true
+          );
+          return;
+        }
+        if(result?.success!==true)throw new Error('기록 저장 결과를 확인하지 못했습니다.');
+
+        setStatus(recordStatus,`저장 완료: 양 ${mainCount}건 · 반찬 ${sideCount}건`);
+        recordMain.value='0';
+        recordSide.value='0';
+      }catch(error){
+        setStatus(recordStatus,error.message,true);
+      }finally{
+        recordSaveButton.disabled=false;
+      }
+    });
+
+    logout.addEventListener('click',signOut);
+    refresh.addEventListener('click',loadRecords);
+    filterButtons.forEach(button=>button.addEventListener('click',()=>selectFilter(button.dataset.filter)));
+
+    entries.addEventListener('click',async event=>{
+      const button=event.target.closest('[data-action]');
+      if(!button)return;
+      const row=button.closest('.entry');
+      const id=row.dataset.id;
+      const action=button.dataset.action;
+      const words={approve:'승인',reject:'보류',hide:'공개 중지',delete:'완전 삭제'};
+      if(action==='delete'&&!confirm('이 기록을 완전히 삭제할까요? 삭제 후 되돌릴 수 없습니다.'))return;
+      row.querySelectorAll('button').forEach(item=>item.disabled=true);
+      setStatus(consoleStatus,`${words[action]} 처리 중입니다…`);
+      try{
+        const ok=await rpc('review_lim_entry',{p_public_id:id,p_action:action});
+        if(ok!==true)throw new Error('현재 상태가 바뀌어 처리하지 못했습니다.');
+        await loadRecords();
+        setStatus(consoleStatus,`${words[action]} 처리가 완료되었습니다.`);
+      }catch(error){setStatus(consoleStatus,error.message,true)}
+    });
+
+    if(token)enterConsole().catch(error=>setStatus(loginStatus,error.message,true));
+  })();
+  </script>
+</body>
+</html>
