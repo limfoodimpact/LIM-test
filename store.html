@@ -60,13 +60,71 @@ h1{font-size:34px;margin:15px 0 10px}
 </section>
 </main>
 <script>
-let mainCount=0, sideCount=0;
-const m=document.getElementById('mainCount'),s=document.getElementById('sideCount'),t=document.getElementById('total');
-function draw(){m.textContent=mainCount;s.textContent=sideCount;t.textContent=mainCount+sideCount}
-document.getElementById('mainPlus').onclick=()=>{mainCount++;draw()};
-document.getElementById('mainMinus').onclick=()=>{if(mainCount>0)mainCount--;draw()};
-document.getElementById('sidePlus').onclick=()=>{sideCount++;draw()};
-document.getElementById('sideMinus').onclick=()=>{if(sideCount>0)sideCount--;draw()};
+const SUPABASE_URL = 'https://slrbqhygpekxsvduluev.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_K9fILZLweR1Qi8IBQyNEmA_OMV1F4yb';
+const STORE_CODE = 'hongje';
+
+let mainCount = 0, sideCount = 0;
+const m = document.getElementById('mainCount');
+const s = document.getElementById('sideCount');
+const t = document.getElementById('total');
+
+function draw(){
+  m.textContent = mainCount;
+  s.textContent = sideCount;
+  t.textContent = mainCount + sideCount;
+}
+
+async function saveCheck(checkType, button){
+  if (button.disabled) return;
+  button.disabled = true;
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/store_checks`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        store_code: STORE_CODE,
+        check_type: checkType
+      })
+    });
+
+    if (!response.ok) {
+      const detail = await response.text();
+      throw new Error(`Supabase ${response.status}: ${detail}`);
+    }
+
+    if (checkType === 'main_reduce') mainCount++;
+    if (checkType === 'side_reduce') sideCount++;
+    draw();
+  } catch (error) {
+    console.error(error);
+    alert('저장되지 않았습니다. 인터넷 연결 후 다시 눌러주세요.');
+  } finally {
+    button.disabled = false;
+  }
+}
+
+document.getElementById('mainPlus').onclick = function(){
+  saveCheck('main_reduce', this);
+};
+document.getElementById('sidePlus').onclick = function(){
+  saveCheck('side_reduce', this);
+};
+
+// 현재 -1은 화면 확인용입니다.
+// DB 기록 취소 기능은 별도 RLS/취소 구조를 만든 뒤 연결합니다.
+document.getElementById('mainMinus').onclick = ()=>{
+  if(mainCount > 0){ mainCount--; draw(); }
+};
+document.getElementById('sideMinus').onclick = ()=>{
+  if(sideCount > 0){ sideCount--; draw(); }
+};
 </script>
 
 <script>
