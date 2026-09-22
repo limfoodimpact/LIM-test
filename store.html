@@ -53,10 +53,9 @@ h1{font-size:34px;margin:15px 0 10px}
 <section class="panel">
  <div class="head"><span class="badge">참여 매장 체크</span><h1>홍제동우동국수</h1><div class="guide">손님 요청이 있을 때 해당 항목을<br>한 번만 눌러주세요.</div></div>
  <div class="cards">
-  <div class="card"><div class="label">메인 음식 줄이기</div><div class="number" id="mainCount">0</div><button class="plus" id="mainPlus">+1</button><button class="minus" id="mainMinus">−1</button></div>
+  <div class="card"><div class="label">메인 음식 양 줄이기</div><div class="number" id="mainCount">0</div><button class="plus" id="mainPlus">+1</button><button class="minus" id="mainMinus">−1</button></div>
   <div class="card"><div class="label">반찬 줄이기 · 빼기</div><div class="number" id="sideCount">0</div><button class="plus" id="sidePlus">+1</button><button class="minus" id="sideMinus">−1</button></div>
  </div>
- <div class="total"><small>오늘의 총 체크</small><strong id="total">0</strong></div>
 </section>
 </main>
 <script>
@@ -67,12 +66,10 @@ const STORE_CODE = 'hongje';
 let mainCount = 0, sideCount = 0;
 const m = document.getElementById('mainCount');
 const s = document.getElementById('sideCount');
-const t = document.getElementById('total');
 
 function draw(){
   m.textContent = mainCount;
   s.textContent = sideCount;
-  t.textContent = mainCount + sideCount;
 }
 
 async function saveCheck(checkType, button){
