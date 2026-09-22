@@ -46,6 +46,35 @@ h1{font-size:34px;margin:15px 0 10px}
  .number{font-size:52px;margin:16px 0}
  .plus{height:76px;font-size:30px}
 }
+.records{margin-top:22px;border-top:1px solid var(--line);padding-top:24px}
+.records-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.records-title{font-size:21px;font-weight:900;color:var(--navy)}
+.month-nav{display:flex;align-items:center;gap:8px}
+.month-btn{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:10px;width:38px;height:38px;font-size:20px;font-weight:900;cursor:pointer}
+.month-label{min-width:105px;text-align:center;font-weight:900;color:var(--ink)}
+.month-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.summary-box{background:var(--pale);border-radius:14px;padding:12px;text-align:center}
+.summary-box small{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}
+.summary-box strong{font-size:21px;color:var(--navy)}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.weekday,.day{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.weekday{padding:8px 2px;text-align:center;font-size:12px;font-weight:850;color:var(--muted);background:var(--pale)}
+.day{min-height:78px;padding:7px 5px;background:#fff}
+.day.empty{background:#fafafa}
+.day.today{box-shadow:inset 0 0 0 2px var(--blue)}
+.date-num{font-size:12px;font-weight:850;color:var(--ink);margin-bottom:6px}
+.day-count{font-size:11px;line-height:1.45;color:var(--muted)}
+.day-count b{color:var(--navy)}
+@media(max-width:600px){
+ .records{margin-top:18px;padding-top:20px}
+ .records-head{align-items:flex-start}
+ .records-title{font-size:19px}
+ .month-label{min-width:92px;font-size:14px}
+ .month-btn{width:34px;height:34px}
+ .day{min-height:68px;padding:5px 3px}
+ .date-num{font-size:11px;margin-bottom:4px}
+ .day-count{font-size:9.5px;letter-spacing:-.04em}
+}
 </style>
 <style>html,body{touch-action:manipulation;-webkit-text-size-adjust:100%}a,button,input,textarea,select{touch-action:manipulation}</style></head>
 <body>
@@ -57,6 +86,21 @@ h1{font-size:34px;margin:15px 0 10px}
   <div class="card"><div class="label">메인 음식 양 줄이기</div><div class="number" id="mainCount">0</div><button class="plus" id="mainPlus">+1</button><button class="minus" id="mainMinus">−1</button></div>
   <div class="card"><div class="label">반찬 줄이기 · 빼기</div><div class="number" id="sideCount">0</div><button class="plus" id="sidePlus">+1</button><button class="minus" id="sideMinus">−1</button></div>
  </div>
+ <section class="records">
+  <div class="records-head">
+   <div class="records-title">우리 매장 기록</div>
+   <div class="month-nav">
+    <button class="month-btn" id="prevMonth" type="button" aria-label="이전 달">‹</button>
+    <div class="month-label" id="monthLabel"></div>
+    <button class="month-btn" id="nextMonth" type="button" aria-label="다음 달">›</button>
+   </div>
+  </div>
+  <div class="month-summary">
+   <div class="summary-box"><small>메인 음식 양 줄이기</small><strong id="monthMain">0건</strong></div>
+   <div class="summary-box"><small>반찬 줄이기 · 빼기</small><strong id="monthSide">0건</strong></div>
+  </div>
+  <div class="calendar" id="calendar"></div>
+ </section>
 </section>
 </main>
 <script>
@@ -168,8 +212,73 @@ async function loadStore(){
   }
 }
 
+
+let calendarYear = new Date().getFullYear();
+let calendarMonth = new Date().getMonth();
+
+function ymDate(y,m,d){
+  return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+}
+async function loadCalendar(){
+  const first = ymDate(calendarYear, calendarMonth, 1);
+  const next = calendarMonth === 11
+    ? ymDate(calendarYear+1,0,1)
+    : ymDate(calendarYear,calendarMonth+1,1);
+
+  const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${encodeURIComponent(STORE_CODE)}&occurred_date=gte.${first}&occurred_date=lt.${next}&select=check_type,occurred_date`;
+  const response=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
+  if(!response.ok) throw new Error(await response.text());
+  const rows=await response.json();
+
+  const byDay={};
+  let monthMain=0, monthSide=0;
+  rows.forEach(row=>{
+    if(!byDay[row.occurred_date]) byDay[row.occurred_date]={main:0,side:0};
+    if(row.check_type==='main_reduce'){ byDay[row.occurred_date].main++; monthMain++; }
+    if(row.check_type==='side_reduce'){ byDay[row.occurred_date].side++; monthSide++; }
+  });
+
+  document.getElementById('monthLabel').textContent=`${calendarYear}년 ${calendarMonth+1}월`;
+  document.getElementById('monthMain').textContent=`${monthMain}건`;
+  document.getElementById('monthSide').textContent=`${monthSide}건`;
+
+  const cal=document.getElementById('calendar');
+  cal.innerHTML='';
+  ['일','월','화','수','목','금','토'].forEach(w=>{
+    const el=document.createElement('div'); el.className='weekday'; el.textContent=w; cal.appendChild(el);
+  });
+
+  const firstDow=new Date(calendarYear,calendarMonth,1).getDay();
+  const days=new Date(calendarYear,calendarMonth+1,0).getDate();
+  for(let i=0;i<firstDow;i++){
+    const el=document.createElement('div'); el.className='day empty'; cal.appendChild(el);
+  }
+  for(let d=1;d<=days;d++){
+    const key=ymDate(calendarYear,calendarMonth,d);
+    const c=byDay[key]||{main:0,side:0};
+    const el=document.createElement('div');
+    el.className='day'+(key===TODAY?' today':'');
+    el.innerHTML=`<div class="date-num">${d}</div><div class="day-count">양 <b>${c.main}</b><br>반찬 <b>${c.side}</b></div>`;
+    cal.appendChild(el);
+  }
+}
+
+document.getElementById('prevMonth').onclick=async function(){
+  calendarMonth--;
+  if(calendarMonth<0){calendarMonth=11;calendarYear--;}
+  try{await loadCalendar();}catch(e){console.error(e);}
+};
+document.getElementById('nextMonth').onclick=async function(){
+  calendarMonth++;
+  if(calendarMonth>11){calendarMonth=0;calendarYear++;}
+  try{await loadCalendar();}catch(e){console.error(e);}
+};
+
 (async function init(){
-  if(await loadStore()) await loadCounts();
+  if(await loadStore()){
+    await loadCounts();
+    try{ await loadCalendar(); }catch(error){ console.error(error); }
+  }
 })();
 </script>
 
