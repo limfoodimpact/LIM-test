@@ -1,1 +1,71 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="site.css"><title>참여 매장 체크 | LIM</title></head><body><header class="wrap top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a><nav class="topnav"><a class="navlink" href="store.html">참여 매장</a><a class="btn primary" href="apply.html">사장님 참여</a></nav></header><main class="section soft"><div class="wrap"><div class="box"><div class="counter-head"><span class="badge">참여 매장 체크</span><h1>홍제동우동국수</h1><div class="counter-guide">손님 요청이 있을 때 해당 항목을<br>한 번만 눌러주세요.</div></div><div class="counter-list"><section class="count-item"><div class="count-label"><strong>메인 음식 줄이기</strong><span class="count-value" id="mainCount">0</span></div><div class="count-actions"><button class="count-plus" id="mainPlus">+1</button><button class="count-minus" id="mainMinus">−1</button></div></section><section class="count-item"><div class="count-label"><strong>반찬 줄이기 · 빼기</strong><span class="count-value" id="sideCount">0</span></div><div class="count-actions"><button class="count-plus" id="sidePlus">+1</button><button class="count-minus" id="sideMinus">−1</button></div></section></div><div class="total-card"><span>오늘의 총 체크</span><strong id="total">0</strong></div><p class="note">현재 기능 확인용입니다. 실제 기록 저장은 다음 단계에서 연결합니다.</p></div></div></main><script>let main=0,side=0;const mc=document.getElementById('mainCount'),sc=document.getElementById('sideCount'),t=document.getElementById('total');function d(){mc.textContent=main;sc.textContent=side;t.textContent=main+side}mainPlus.onclick=()=>{main++;d()};mainMinus.onclick=()=>{if(main>0)main--;d()};sidePlus.onclick=()=>{side++;d()};sideMinus.onclick=()=>{if(side>0)side--;d()};</script></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>참여 매장 체크 | LIM Food Impact</title>
+<style>
+*{box-sizing:border-box}
+:root{--navy:#1F4E79;--blue:#3E7CB1;--pale:#F2F5F8;--ink:#17293A;--muted:#61778A;--line:#DCE6EF}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;color:var(--ink);background:var(--pale);letter-spacing:-.025em}
+a{text-decoration:none;color:inherit}
+.top{height:70px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,calc((100% - 1080px)/2));gap:14px}
+.logo{width:168px;max-height:48px;object-fit:contain}
+.topnav{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.navlink{padding:10px 8px;color:var(--navy);font-weight:800}
+.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;padding:13px 17px;font-weight:800}
+.primary{background:var(--navy);color:#fff}
+main{padding:48px 18px 70px}
+.panel{width:min(620px,100%);margin:auto;background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px}
+.head{text-align:center;margin-bottom:25px}
+.badge{display:inline-block;background:var(--pale);color:var(--navy);border-radius:999px;padding:8px 14px;font-weight:800;font-size:15px}
+h1{font-size:34px;margin:15px 0 10px}
+.guide{font-size:16px;color:var(--muted);line-height:1.55}
+.cards{display:grid;gap:16px}
+.card{border:1px solid var(--line);border-radius:20px;padding:22px}
+.label{font-size:21px;font-weight:850;color:var(--navy);text-align:center}
+.number{font-size:54px;line-height:1;font-weight:900;color:var(--navy);text-align:center;margin:18px 0}
+.plus{display:block;width:100%;height:78px;border:0;border-radius:16px;background:var(--navy);color:white;font-size:31px;font-weight:900;cursor:pointer}
+.minus{display:block;margin:10px auto 0;height:42px;min-width:78px;padding:0 20px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--navy);font-size:20px;font-weight:850;cursor:pointer}
+.total{margin-top:18px;border-radius:18px;background:var(--pale);padding:17px;text-align:center}
+.total small{display:block;color:var(--muted);font-size:14px;margin-bottom:3px}
+.total strong{font-size:34px;color:var(--navy)}
+@media(max-width:600px){
+ .top{height:72px;padding:0 16px}
+ .logo{width:145px}
+ .navlink{font-size:14px;padding:8px 4px}
+ .btn{padding:11px 13px;font-size:14px}
+ main{padding:28px 12px 48px}
+ .panel{padding:22px 14px;border-radius:22px}
+ .head{margin-bottom:20px}
+ h1{font-size:29px}
+ .guide{font-size:15px}
+ .card{padding:20px 14px}
+ .label{font-size:20px}
+ .number{font-size:52px;margin:16px 0}
+ .plus{height:76px;font-size:30px}
+}
+</style>
+</head>
+<body>
+<header class="top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a><nav class="topnav"><a class="navlink" href="store.html">참여 매장</a><a class="btn primary" href="apply.html">사장님 참여</a></nav></header>
+<main>
+<section class="panel">
+ <div class="head"><span class="badge">참여 매장 체크</span><h1>홍제동우동국수</h1><div class="guide">손님 요청이 있을 때 해당 항목을<br>한 번만 눌러주세요.</div></div>
+ <div class="cards">
+  <div class="card"><div class="label">메인 음식 줄이기</div><div class="number" id="mainCount">0</div><button class="plus" id="mainPlus">+1</button><button class="minus" id="mainMinus">−1</button></div>
+  <div class="card"><div class="label">반찬 줄이기 · 빼기</div><div class="number" id="sideCount">0</div><button class="plus" id="sidePlus">+1</button><button class="minus" id="sideMinus">−1</button></div>
+ </div>
+ <div class="total"><small>오늘의 총 체크</small><strong id="total">0</strong></div>
+</section>
+</main>
+<script>
+let mainCount=0, sideCount=0;
+const m=document.getElementById('mainCount'),s=document.getElementById('sideCount'),t=document.getElementById('total');
+function draw(){m.textContent=mainCount;s.textContent=sideCount;t.textContent=mainCount+sideCount}
+document.getElementById('mainPlus').onclick=()=>{mainCount++;draw()};
+document.getElementById('mainMinus').onclick=()=>{if(mainCount>0)mainCount--;draw()};
+document.getElementById('sidePlus').onclick=()=>{sideCount++;draw()};
+document.getElementById('sideMinus').onclick=()=>{if(sideCount>0)sideCount--;draw()};
+</script>
+</body></html>
