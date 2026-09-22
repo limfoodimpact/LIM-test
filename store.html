@@ -46,7 +46,7 @@ h1{font-size:34px;margin:15px 0 10px}
  .plus{height:76px;font-size:30px}
 }
 </style>
-</head>
+<style>html,body{touch-action:manipulation;-webkit-text-size-adjust:100%}a,button,input,textarea,select{touch-action:manipulation}</style></head>
 <body>
 <header class="top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a><nav class="topnav"><a class="navlink" href="store.html">참여 매장</a><a class="btn primary" href="apply.html">사장님 참여</a></nav></header>
 <main>
@@ -67,5 +67,17 @@ document.getElementById('mainPlus').onclick=()=>{mainCount++;draw()};
 document.getElementById('mainMinus').onclick=()=>{if(mainCount>0)mainCount--;draw()};
 document.getElementById('sidePlus').onclick=()=>{sideCount++;draw()};
 document.getElementById('sideMinus').onclick=()=>{if(sideCount>0)sideCount--;draw()};
+</script>
+
+<script>
+// iPhone/Safari: prevent double-tap page zoom while preserving normal scrolling and pinch zoom.
+(function(){
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', function(e){
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) e.preventDefault();
+    lastTouchEnd = now;
+  }, {passive:false});
+})();
 </script>
 </body></html>
