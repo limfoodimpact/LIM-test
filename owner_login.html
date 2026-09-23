@@ -1,8 +1,123 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>사장님 로그인 | LIM Food Impact</title><style>
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;color:#303A35;background:#FAFBF8}
-.wrap{max-width:720px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center}
-.logo{max-width:155px}.card{margin-top:90px;background:#fff;border:1px solid #e4e9e5;border-radius:22px;padding:30px;text-align:center}
-h1{color:#244A5A;font-size:32px;margin:0 0 12px}p{line-height:1.65}.back{display:inline-block;margin-top:20px;color:#365B43;font-weight:700;text-decoration:none}
-</style></head><body><header class="wrap top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a></header>
-<main class="wrap"><div class="card"><h1>사장님 로그인</h1><p>참여 승인 후 사용할 수 있습니다.<br>로그인 기능은 다음 단계에서 연결합니다.</p><a class="back" href="index.html">홈으로</a></div></main></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>사장님 로그인 | LIM Food Impact</title>
+<style>
+*{box-sizing:border-box}
+:root{--navy:#1F4E79;--ink:#17293A;--muted:#61778A;--line:#DCE6EF;--pale:#F2F5F8;--green:#365B43}
+html,body{touch-action:manipulation;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;color:var(--ink);background:#fff;letter-spacing:-.025em}
+button,input{font:inherit}
+.top{height:78px;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,calc((100% - 960px)/2));border-bottom:1px solid #eef2f5}
+.logo{width:170px;max-height:48px;object-fit:contain}
+.home{color:var(--navy);font-weight:800;text-decoration:none}
+main{padding:58px 18px 80px;background:linear-gradient(#fff 0 180px,var(--pale) 180px 100%);min-height:calc(100vh - 78px)}
+.wrap{width:min(560px,100%);margin:auto}
+.hero{text-align:center;margin-bottom:30px}
+.badge{display:inline-block;padding:8px 14px;border-radius:999px;background:var(--pale);color:var(--navy);font-weight:850}
+h1{font-size:38px;line-height:1.2;margin:18px 0 12px}
+.hero p{margin:0;color:var(--muted);font-size:17px;line-height:1.7}
+.card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px;box-shadow:0 10px 28px rgba(31,78,121,.05)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--pale);border-radius:14px;padding:5px;margin-bottom:24px}
+.tab{height:50px;border:0;border-radius:11px;background:transparent;color:var(--muted);font-weight:850;cursor:pointer}
+.tab.active{background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.panel{display:none} .panel.active{display:block}
+label{display:block;font-weight:850;margin:17px 0 8px}
+input{width:100%;height:58px;border:1px solid #cdd9e4;border-radius:13px;padding:0 15px;font-size:16px;outline:none;background:#fff}
+input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(31,78,121,.08)}
+.primary{width:100%;height:60px;border:0;border-radius:14px;background:var(--navy);color:#fff;font-size:18px;font-weight:900;margin-top:22px;cursor:pointer}
+.primary:disabled{opacity:.55}
+.help{font-size:14px;color:var(--muted);line-height:1.6;margin:14px 2px 0}
+.msg{display:none;margin-top:16px;padding:14px;border-radius:12px;font-size:14px;line-height:1.55}
+.msg.show{display:block} .msg.ok{background:#eef6f0;color:var(--green)} .msg.err{background:#fff1ef;color:#9b3d32}
+@media(max-width:600px){
+ .top{height:72px;padding:0 16px} .logo{width:145px}
+ main{padding:38px 14px 60px;background:linear-gradient(#fff 0 150px,var(--pale) 150px 100%)}
+ h1{font-size:32px} .hero p{font-size:15px} .card{padding:20px 16px;border-radius:21px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+ <a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a>
+ <a class="home" href="index.html">홈</a>
+</header>
+<main><div class="wrap">
+ <div class="hero"><span class="badge">참여 매장 전용</span><h1>사장님 로그인</h1><p>승인된 매장 사장님만 이용할 수 있습니다.<br>처음 이용하시면 먼저 계정을 만들어주세요.</p></div>
+ <section class="card">
+  <div class="tabs">
+   <button class="tab active" data-target="login">로그인</button>
+   <button class="tab" data-target="signup">처음 가입</button>
+  </div>
+  <div class="panel active" id="login">
+   <label for="loginEmail">이메일</label><input id="loginEmail" type="email" autocomplete="email" placeholder="사장님 로그인 이메일">
+   <label for="loginPassword">비밀번호</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="비밀번호">
+   <button class="primary" id="loginBtn">로그인</button>
+   <div class="msg" id="loginMsg"></div>
+  </div>
+  <div class="panel" id="signup">
+   <label for="signupEmail">승인받은 이메일</label><input id="signupEmail" type="email" autocomplete="email" placeholder="관리자에게 등록한 이메일">
+   <label for="signupPassword">비밀번호</label><input id="signupPassword" type="password" autocomplete="new-password" placeholder="8자 이상">
+   <label for="signupPassword2">비밀번호 확인</label><input id="signupPassword2" type="password" autocomplete="new-password" placeholder="한 번 더 입력">
+   <button class="primary" id="signupBtn">계정 만들기</button>
+   <p class="help">관리자에게 등록한 이메일과 같은 이메일을 사용해주세요. 비밀번호는 LIM이 별도로 보관하지 않습니다.</p>
+   <div class="msg" id="signupMsg"></div>
+  </div>
+ </section>
+</div></main>
+<script>
+const SUPABASE_URL='https://slrbqhygpexksvduluev.supabase.co';
+const SUPABASE_KEY='sb_publishable_K9fILZLweR1Qi8IBQyNEmA_OMV1F4yb';
+
+document.querySelectorAll('.tab').forEach(btn=>btn.onclick=()=>{
+ document.querySelectorAll('.tab,.panel').forEach(x=>x.classList.remove('active'));
+ btn.classList.add('active'); document.getElementById(btn.dataset.target).classList.add('active');
+});
+
+function show(id,text,ok=false){const el=document.getElementById(id);el.textContent=text;el.className='msg show '+(ok?'ok':'err');}
+function authHeaders(token){return {'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`,'Content-Type':'application/json'};}
+async function getMyStore(token){
+ const r=await fetch(`${SUPABASE_URL}/rest/v1/lim_stores?owner_user_id=eq.${encodeURIComponent((await getUser(token)).id)}&status=eq.approved&select=store_code&limit=1`,{headers:authHeaders(token)});
+ if(!r.ok) throw new Error(await r.text()); const rows=await r.json(); return rows[0]||null;
+}
+async function getUser(token){
+ const r=await fetch(`${SUPABASE_URL}/auth/v1/user`,{headers:authHeaders(token)});
+ if(!r.ok) throw new Error(await r.text()); return await r.json();
+}
+async function routeOwner(token){
+ const store=await getMyStore(token);
+ if(!store) throw new Error('이 계정에 연결된 승인 매장을 찾지 못했습니다. 관리자에게 등록한 이메일인지 확인해주세요.');
+ location.href=`store.html?store=${encodeURIComponent(store.store_code)}`;
+}
+document.getElementById('loginBtn').onclick=async function(){
+ const email=document.getElementById('loginEmail').value.trim(), password=document.getElementById('loginPassword').value;
+ if(!email||!password) return show('loginMsg','이메일과 비밀번호를 입력해주세요.');
+ this.disabled=true;
+ try{
+  const r=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+  const data=await r.json(); if(!r.ok) throw new Error('이메일 또는 비밀번호를 확인해주세요.');
+  localStorage.setItem('lim_owner_session',JSON.stringify({access_token:data.access_token,refresh_token:data.refresh_token,expires_at:Date.now()+data.expires_in*1000}));
+  await routeOwner(data.access_token);
+ }catch(e){show('loginMsg',e.message||'로그인하지 못했습니다.');}finally{this.disabled=false;}
+};
+document.getElementById('signupBtn').onclick=async function(){
+ const email=document.getElementById('signupEmail').value.trim(), p1=document.getElementById('signupPassword').value, p2=document.getElementById('signupPassword2').value;
+ if(!email||!p1||!p2) return show('signupMsg','모든 항목을 입력해주세요.');
+ if(p1.length<8) return show('signupMsg','비밀번호는 8자 이상으로 만들어주세요.');
+ if(p1!==p2) return show('signupMsg','비밀번호가 서로 다릅니다.');
+ this.disabled=true;
+ try{
+  const r=await fetch(`${SUPABASE_URL}/auth/v1/signup`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({email,password:p1})});
+  const data=await r.json(); if(!r.ok) throw new Error(data.msg||data.error_description||'계정을 만들지 못했습니다.');
+  if(data.access_token){
+   localStorage.setItem('lim_owner_session',JSON.stringify({access_token:data.access_token,refresh_token:data.refresh_token,expires_at:Date.now()+(data.expires_in||3600)*1000}));
+   await routeOwner(data.access_token);
+  } else {
+   show('signupMsg','계정이 만들어졌습니다. 이메일 확인이 필요한 설정이면 받은 메일을 확인한 뒤 로그인해주세요.',true);
+  }
+ }catch(e){show('signupMsg',e.message||'계정을 만들지 못했습니다.');}finally{this.disabled=false;}
+};
+</script>
+</body></html>
