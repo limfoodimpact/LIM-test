@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>참여 매장 체크 | LIM Food Impact</title>
 <style>
 *{box-sizing:border-box}
@@ -21,7 +21,6 @@ main{padding:48px 18px 70px}
 .badge{display:inline-block;background:var(--pale);color:var(--navy);border-radius:999px;padding:8px 14px;font-weight:800;font-size:15px}
 h1{font-size:34px;margin:15px 0 10px}
 .guide{font-size:16px;color:var(--muted);line-height:1.55}
-.today{margin-top:10px;font-size:14px;font-weight:800;color:var(--navy)}
 .cards{display:grid;gap:16px}
 .card{border:1px solid var(--line);border-radius:20px;padding:22px}
 .label{font-size:21px;font-weight:850;color:var(--navy);text-align:center}
@@ -46,354 +45,27 @@ h1{font-size:34px;margin:15px 0 10px}
  .number{font-size:52px;margin:16px 0}
  .plus{height:76px;font-size:30px}
 }
-.records{margin-top:22px;border-top:1px solid var(--line);padding-top:24px}
-.records-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
-.records-title{font-size:21px;font-weight:900;color:var(--navy)}
-.month-nav{display:flex;align-items:center;gap:8px}
-.month-btn{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:10px;width:38px;height:38px;font-size:20px;font-weight:900;cursor:pointer}
-.month-label{min-width:105px;text-align:center;font-weight:900;color:var(--ink)}
-.month-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.summary-box{background:var(--pale);border-radius:14px;padding:12px;text-align:center}
-.summary-box small{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}
-.summary-box strong{font-size:21px;color:var(--navy)}
-.calendar{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
-.weekday,.day{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
-.weekday{padding:8px 2px;text-align:center;font-size:12px;font-weight:850;color:var(--muted);background:var(--pale)}
-.day{min-height:78px;padding:7px 5px;background:#fff}
-.day.empty{background:#fafafa}
-.day.today{box-shadow:inset 0 0 0 2px var(--blue)}
-.day.has-record{background:var(--pale)}
-.day.has-record .date-num{color:var(--navy)}
-.day.sunday .date-num,.day.holiday .date-num{color:#C43B3B}
-.holiday-name{margin-top:3px;font-size:9.5px;line-height:1.25;font-weight:800;color:#C43B3B;word-break:keep-all}
-.date-num{font-size:12px;font-weight:850;color:var(--ink);margin-bottom:6px}
-.day-count{font-size:11px;line-height:1.45;color:var(--muted)}
-.day-count b{color:var(--navy)}
-@media(max-width:600px){
- .records{margin-top:18px;padding-top:20px}
- .records-head{align-items:flex-start}
- .records-title{font-size:19px}
- .month-label{min-width:92px;font-size:14px}
- .month-btn{width:34px;height:34px}
- .day{min-height:68px;padding:5px 3px}
- .date-num{font-size:11px;margin-bottom:4px}
- .day-count{font-size:9.5px;letter-spacing:-.04em}
-}
 </style>
-<style>html,body{touch-action:manipulation;-webkit-text-size-adjust:100%}a,button,input,textarea,select{touch-action:manipulation}</style>
-<style>
-/* Meeting-ready compact owner check UI — visual only */
-@media(max-width:600px){
-  .top{height:60px!important;padding:0 14px!important}
-  .logo{width:132px!important;max-height:40px!important}
-  .navlink{display:none!important}
-  .topnav .btn{padding:9px 12px!important;font-size:13px!important}
-
-  main{padding:14px 10px 34px!important}
-  .panel{padding:16px 12px 18px!important;border-radius:18px!important}
-  .head{margin-bottom:14px!important}
-  .badge{padding:5px 10px!important;font-size:12px!important}
-  h1{font-size:25px!important;line-height:1.2!important;margin:8px 0 5px!important}
-  .guide{font-size:13px!important;line-height:1.4!important}
-  .guide br{display:none!important}
-  .today{margin-top:5px!important;font-size:12px!important}
-
-  .cards{grid-template-columns:1fr 1fr!important;gap:8px!important}
-  .card{padding:13px 8px 10px!important;border-radius:15px!important}
-  .label{font-size:15px!important;line-height:1.35!important;min-height:41px!important;display:flex!important;align-items:center!important;justify-content:center!important}
-  .number{font-size:38px!important;margin:8px 0 9px!important}
-  .plus{height:54px!important;border-radius:13px!important;font-size:25px!important}
-  .minus{height:34px!important;min-width:60px!important;margin-top:7px!important;padding:0 14px!important;font-size:17px!important}
-
-  .records{margin-top:16px!important;padding-top:16px!important}
-  .records-head{margin-bottom:10px!important}
-  .records-title{font-size:18px!important}
-  .month-btn{width:32px!important;height:32px!important}
-  .month-label{min-width:84px!important;font-size:13px!important}
-  .month-summary{gap:8px!important;margin-bottom:10px!important}
-  .summary-box{padding:9px 6px!important}
-  .summary-box small{font-size:10px!important;line-height:1.3!important}
-  .summary-box strong{font-size:18px!important}
-  .day{min-height:61px!important}
-}
-@media(max-width:360px){
-  .label{font-size:14px!important}
-  .number{font-size:35px!important}
-}
-</style>
-<style>
-@media(max-width:600px){
- .badge{display:none!important}
- .head{margin-bottom:10px!important}
- h1{margin:2px 0 4px!important}
- .guide{margin:0!important}
- .today{margin-top:3px!important}
- .cards{margin-top:10px!important}
-}
-</style></head>
+</head>
 <body>
 <header class="top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a><nav class="topnav"><a class="navlink" href="store.html">참여 매장</a><a class="btn primary" href="apply.html">사장님 참여</a></nav></header>
 <main>
 <section class="panel">
- <div class="head"><span class="badge">참여 매장 체크</span><h1 id="storeName">매장 확인 중...</h1><div class="guide">손님 요청이 있을 때 +1을 눌러주세요.</div><div class="today" id="todayLabel"></div></div>
+ <div class="head"><span class="badge">참여 매장 체크</span><h1>홍제동우동국수</h1><div class="guide">손님 요청이 있을 때 해당 항목을<br>한 번만 눌러주세요.</div></div>
  <div class="cards">
-  <div class="card"><div class="label">메인 음식 양 줄이기</div><div class="number" id="mainCount">0</div><button class="plus" id="mainPlus">+1</button><button class="minus" id="mainMinus">−1</button></div>
+  <div class="card"><div class="label">메인 음식 줄이기</div><div class="number" id="mainCount">0</div><button class="plus" id="mainPlus">+1</button><button class="minus" id="mainMinus">−1</button></div>
   <div class="card"><div class="label">반찬 줄이기 · 빼기</div><div class="number" id="sideCount">0</div><button class="plus" id="sidePlus">+1</button><button class="minus" id="sideMinus">−1</button></div>
  </div>
- <section class="records">
-  <div class="records-head">
-   <div class="records-title">우리 매장 기록</div>
-   <div class="month-nav">
-    <button class="month-btn" id="prevMonth" type="button" aria-label="이전 달">‹</button>
-    <div class="month-label" id="monthLabel"></div>
-    <button class="month-btn" id="nextMonth" type="button" aria-label="다음 달">›</button>
-   </div>
-  </div>
-  <div class="month-summary">
-   <div class="summary-box"><small>메인 음식 양 줄이기</small><strong id="monthMain">0건</strong></div>
-   <div class="summary-box"><small>반찬 줄이기 · 빼기</small><strong id="monthSide">0건</strong></div>
-  </div>
-  <div class="calendar" id="calendar"></div>
- </section>
+ <div class="total"><small>오늘의 총 체크</small><strong id="total">0</strong></div>
 </section>
 </main>
 <script>
-const SUPABASE_URL = 'https://slrbqhygpexksvduluev.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_K9fILZLweR1Qi8IBQyNEmA_OMV1F4yb';
-const params = new URLSearchParams(location.search);
-const STORE_CODE = (params.get('store') || '').trim();
-
-let mainCount = 0, sideCount = 0;
-let businessDayCutoff = '03:00:00';
-let BUSINESS_DATE = '';
-const m = document.getElementById('mainCount');
-const s = document.getElementById('sideCount');
-const storeNameEl = document.getElementById('storeName');
-
-function formatLocalDate(date){
-  const y = date.getFullYear();
-  const mo = String(date.getMonth()+1).padStart(2,'0');
-  const d = String(date.getDate()).padStart(2,'0');
-  return `${y}-${mo}-${d}`;
-}
-
-function getBusinessDate(cutoff){
-  const now = new Date();
-  const parts = (cutoff || '03:00:00').split(':').map(Number);
-  const cutoffMinutes = (parts[0] || 0) * 60 + (parts[1] || 0);
-  const nowMinutes = now.getHours() * 60 + now.getMinutes();
-  const business = new Date(now);
-  if(nowMinutes < cutoffMinutes) business.setDate(business.getDate() - 1);
-  return formatLocalDate(business);
-}
-
-function draw(){ m.textContent=mainCount; s.textContent=sideCount; }
-
-function updateBusinessDate(){
-  BUSINESS_DATE = getBusinessDate(businessDayCutoff);
-  document.getElementById('todayLabel').textContent = `${BUSINESS_DATE} 영업일 기록`;
-}
-
-async function saveCheck(checkType, button){
-  updateBusinessDate();
-  if(button.disabled) return;
-  button.disabled=true;
-  try{
-    const response=await fetch(`${SUPABASE_URL}/rest/v1/store_checks`,{
-      method:'POST',
-      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},
-      body:JSON.stringify({store_code:STORE_CODE,check_type:checkType,occurred_date:BUSINESS_DATE})
-    });
-    if(!response.ok) throw new Error(await response.text());
-    if(checkType==='main_reduce') mainCount++;
-    if(checkType==='side_reduce') sideCount++;
-    draw();
-  }catch(error){
-    console.error(error);
-    alert('저장되지 않았습니다. 인터넷 연결 후 다시 눌러주세요.');
-  }finally{ button.disabled=false; }
-}
-
-document.getElementById('mainPlus').onclick=function(){saveCheck('main_reduce',this)};
-document.getElementById('sidePlus').onclick=function(){saveCheck('side_reduce',this)};
-
-async function deleteLatestCheck(checkType, button){
-  updateBusinessDate();
-  const current=checkType==='main_reduce'?mainCount:sideCount;
-  if(current<=0||button.disabled) return;
-  button.disabled=true;
-  try{
-    const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${encodeURIComponent(STORE_CODE)}&check_type=eq.${encodeURIComponent(checkType)}&occurred_date=eq.${BUSINESS_DATE}&select=id&order=created_at.desc,id.desc&limit=1`;
-    const find=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
-    if(!find.ok) throw new Error(await find.text());
-    const rows=await find.json();
-    if(!rows.length) return;
-    const del=await fetch(`${SUPABASE_URL}/rest/v1/store_checks?id=eq.${rows[0].id}`,{
-      method:'DELETE',
-      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal'}
-    });
-    if(!del.ok) throw new Error(await del.text());
-    if(checkType==='main_reduce') mainCount--;
-    if(checkType==='side_reduce') sideCount--;
-    draw();
-  }catch(error){
-    console.error(error);
-    alert('취소되지 않았습니다. 잠시 후 다시 시도해주세요.');
-  }finally{button.disabled=false;}
-}
-document.getElementById('mainMinus').onclick=function(){deleteLatestCheck('main_reduce',this)};
-document.getElementById('sideMinus').onclick=function(){deleteLatestCheck('side_reduce',this)};
-
-async function loadCounts(){
-  updateBusinessDate();
-  try{
-    const url=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${encodeURIComponent(STORE_CODE)}&occurred_date=eq.${BUSINESS_DATE}&select=check_type`;
-    const response=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
-    if(!response.ok) throw new Error(await response.text());
-    const rows=await response.json();
-    mainCount=rows.filter(x=>x.check_type==='main_reduce').length;
-    sideCount=rows.filter(x=>x.check_type==='side_reduce').length;
-    draw();
-  }catch(error){console.error(error);}
-}
-async function loadStore(){
-  if(!STORE_CODE){
-    storeNameEl.textContent='매장 주소를 확인해주세요';
-    document.querySelectorAll('.plus,.minus').forEach(b=>b.disabled=true);
-    return false;
-  }
-  try{
-    const url=`${SUPABASE_URL}/rest/v1/stores?store_code=eq.${encodeURIComponent(STORE_CODE)}&status=eq.active&select=store_name,business_day_cutoff&limit=1`;
-    const response=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
-    if(!response.ok) throw new Error(await response.text());
-    const rows=await response.json();
-    if(!rows.length){
-      storeNameEl.textContent='등록되지 않은 매장입니다';
-      document.querySelectorAll('.plus,.minus').forEach(b=>b.disabled=true);
-      return false;
-    }
-    storeNameEl.textContent=rows[0].store_name;
-    businessDayCutoff=rows[0].business_day_cutoff || '03:00:00';
-    updateBusinessDate();
-    const [by,bm] = BUSINESS_DATE.split('-').map(Number);
-    calendarYear = by;
-    calendarMonth = bm - 1;
-    return true;
-  }catch(error){
-    console.error(error);
-    storeNameEl.textContent='매장 정보를 불러오지 못했습니다';
-    document.querySelectorAll('.plus,.minus').forEach(b=>b.disabled=true);
-    return false;
-  }
-}
-
-
-let calendarYear = new Date().getFullYear();
-let calendarMonth = new Date().getMonth();
-
-function ymDate(y,m,d){
-  return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-}
-async function loadCalendar(){
-  const first = ymDate(calendarYear, calendarMonth, 1);
-  const next = calendarMonth === 11
-    ? ymDate(calendarYear+1,0,1)
-    : ymDate(calendarYear,calendarMonth+1,1);
-
-  const checksUrl=`${SUPABASE_URL}/rest/v1/store_checks?store_code=eq.${encodeURIComponent(STORE_CODE)}&occurred_date=gte.${first}&occurred_date=lt.${next}&select=check_type,occurred_date`;
-  const holidaysUrl=`${SUPABASE_URL}/rest/v1/holidays?holiday_date=gte.${first}&holiday_date=lt.${next}&select=holiday_date,holiday_name`;
-
-  const [checksResponse, holidaysResponse] = await Promise.all([
-    fetch(checksUrl,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}}),
-    fetch(holidaysUrl,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}})
-  ]);
-
-  if(!checksResponse.ok) throw new Error(await checksResponse.text());
-  if(!holidaysResponse.ok) throw new Error(await holidaysResponse.text());
-
-  const rows=await checksResponse.json();
-  const holidays=await holidaysResponse.json();
-
-  const holidayMap={};
-  holidays.forEach(h=>{ holidayMap[h.holiday_date]=h.holiday_name; });
-
-  const byDay={};
-  let monthMain=0, monthSide=0;
-  rows.forEach(row=>{
-    if(!byDay[row.occurred_date]) byDay[row.occurred_date]={main:0,side:0};
-    if(row.check_type==='main_reduce'){ byDay[row.occurred_date].main++; monthMain++; }
-    if(row.check_type==='side_reduce'){ byDay[row.occurred_date].side++; monthSide++; }
-  });
-
-  document.getElementById('monthLabel').textContent=`${calendarYear}년 ${calendarMonth+1}월`;
-  document.getElementById('monthMain').textContent=`${monthMain}건`;
-  document.getElementById('monthSide').textContent=`${monthSide}건`;
-
-  const cal=document.getElementById('calendar');
-  cal.innerHTML='';
-  ['일','월','화','수','목','금','토'].forEach((w,i)=>{
-    const el=document.createElement('div');
-    el.className='weekday'+(i===0?' sunday':'');
-    el.textContent=w;
-    cal.appendChild(el);
-  });
-
-  const firstDow=new Date(calendarYear,calendarMonth,1).getDay();
-  const days=new Date(calendarYear,calendarMonth+1,0).getDate();
-  for(let i=0;i<firstDow;i++){
-    const el=document.createElement('div'); el.className='day empty'; cal.appendChild(el);
-  }
-
-  for(let d=1;d<=days;d++){
-    const key=ymDate(calendarYear,calendarMonth,d);
-    const c=byDay[key]||{main:0,side:0};
-    const hasRecord=(c.main+c.side)>0;
-    const holidayName=holidayMap[key]||'';
-    const isSunday=new Date(calendarYear,calendarMonth,d).getDay()===0;
-
-    const el=document.createElement('div');
-    el.className='day'
-      +(key===BUSINESS_DATE?' today':'')
-      +(hasRecord?' has-record':'')
-      +(isSunday?' sunday':'')
-      +(holidayName?' holiday':'');
-
-    let html=`<div class="date-num">${d}</div>`;
-    if(holidayName) html+=`<div class="holiday-name">${holidayName}</div>`;
-    if(hasRecord) html+=`<div class="day-count">양 <b>${c.main}</b><br>반찬 <b>${c.side}</b></div>`;
-    el.innerHTML=html;
-    cal.appendChild(el);
-  }
-}
-
-document.getElementById('prevMonth').onclick=async function(){
-  calendarMonth--;
-  if(calendarMonth<0){calendarMonth=11;calendarYear--;}
-  try{await loadCalendar();}catch(e){console.error(e);}
-};
-document.getElementById('nextMonth').onclick=async function(){
-  calendarMonth++;
-  if(calendarMonth>11){calendarMonth=0;calendarYear++;}
-  try{await loadCalendar();}catch(e){console.error(e);}
-};
-
-(async function init(){
-  if(await loadStore()){
-    await loadCounts();
-    try{ await loadCalendar(); }catch(error){ console.error(error); }
-  }
-})();
-</script>
-
-<script>
-// iPhone/Safari: prevent double-tap page zoom while preserving normal scrolling and pinch zoom.
-(function(){
-  let lastTouchEnd = 0;
-  document.addEventListener('touchend', function(e){
-    const now = Date.now();
-    if (now - lastTouchEnd <= 300) e.preventDefault();
-    lastTouchEnd = now;
-  }, {passive:false});
-})();
+let mainCount=0, sideCount=0;
+const m=document.getElementById('mainCount'),s=document.getElementById('sideCount'),t=document.getElementById('total');
+function draw(){m.textContent=mainCount;s.textContent=sideCount;t.textContent=mainCount+sideCount}
+document.getElementById('mainPlus').onclick=()=>{mainCount++;draw()};
+document.getElementById('mainMinus').onclick=()=>{if(mainCount>0)mainCount--;draw()};
+document.getElementById('sidePlus').onclick=()=>{sideCount++;draw()};
+document.getElementById('sideMinus').onclick=()=>{if(sideCount>0)sideCount--;draw()};
 </script>
 </body></html>
