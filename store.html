@@ -121,12 +121,21 @@ h1{font-size:34px;margin:15px 0 10px}
   .number{font-size:35px!important}
 }
 </style>
-</head>
+<style>
+@media(max-width:600px){
+ .badge{display:none!important}
+ .head{margin-bottom:10px!important}
+ h1{margin:2px 0 4px!important}
+ .guide{margin:0!important}
+ .today{margin-top:3px!important}
+ .cards{margin-top:10px!important}
+}
+</style></head>
 <body>
 <header class="top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a><nav class="topnav"><a class="navlink" href="store.html">참여 매장</a><a class="btn primary" href="apply.html">사장님 참여</a></nav></header>
 <main>
 <section class="panel">
- <div class="head"><span class="badge">참여 매장 체크</span><h1 id="storeName">매장 확인 중...</h1><div class="guide">손님 요청이 있을 때 해당 항목을<br>한 번만 눌러주세요.</div><div class="today" id="todayLabel"></div></div>
+ <div class="head"><span class="badge">참여 매장 체크</span><h1 id="storeName">매장 확인 중...</h1><div class="guide">손님 요청이 있을 때 +1을 눌러주세요.</div><div class="today" id="todayLabel"></div></div>
  <div class="cards">
   <div class="card"><div class="label">메인 음식 양 줄이기</div><div class="number" id="mainCount">0</div><button class="plus" id="mainPlus">+1</button><button class="minus" id="mainMinus">−1</button></div>
   <div class="card"><div class="label">반찬 줄이기 · 빼기</div><div class="number" id="sideCount">0</div><button class="plus" id="sidePlus">+1</button><button class="minus" id="sideMinus">−1</button></div>
