@@ -80,7 +80,48 @@ h1{font-size:34px;margin:15px 0 10px}
  .day-count{font-size:9.5px;letter-spacing:-.04em}
 }
 </style>
-<style>html,body{touch-action:manipulation;-webkit-text-size-adjust:100%}a,button,input,textarea,select{touch-action:manipulation}</style></head>
+<style>html,body{touch-action:manipulation;-webkit-text-size-adjust:100%}a,button,input,textarea,select{touch-action:manipulation}</style>
+<style>
+/* Meeting-ready compact owner check UI — visual only */
+@media(max-width:600px){
+  .top{height:60px!important;padding:0 14px!important}
+  .logo{width:132px!important;max-height:40px!important}
+  .navlink{display:none!important}
+  .topnav .btn{padding:9px 12px!important;font-size:13px!important}
+
+  main{padding:14px 10px 34px!important}
+  .panel{padding:16px 12px 18px!important;border-radius:18px!important}
+  .head{margin-bottom:14px!important}
+  .badge{padding:5px 10px!important;font-size:12px!important}
+  h1{font-size:25px!important;line-height:1.2!important;margin:8px 0 5px!important}
+  .guide{font-size:13px!important;line-height:1.4!important}
+  .guide br{display:none!important}
+  .today{margin-top:5px!important;font-size:12px!important}
+
+  .cards{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .card{padding:13px 8px 10px!important;border-radius:15px!important}
+  .label{font-size:15px!important;line-height:1.35!important;min-height:41px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+  .number{font-size:38px!important;margin:8px 0 9px!important}
+  .plus{height:54px!important;border-radius:13px!important;font-size:25px!important}
+  .minus{height:34px!important;min-width:60px!important;margin-top:7px!important;padding:0 14px!important;font-size:17px!important}
+
+  .records{margin-top:16px!important;padding-top:16px!important}
+  .records-head{margin-bottom:10px!important}
+  .records-title{font-size:18px!important}
+  .month-btn{width:32px!important;height:32px!important}
+  .month-label{min-width:84px!important;font-size:13px!important}
+  .month-summary{gap:8px!important;margin-bottom:10px!important}
+  .summary-box{padding:9px 6px!important}
+  .summary-box small{font-size:10px!important;line-height:1.3!important}
+  .summary-box strong{font-size:18px!important}
+  .day{min-height:61px!important}
+}
+@media(max-width:360px){
+  .label{font-size:14px!important}
+  .number{font-size:35px!important}
+}
+</style>
+</head>
 <body>
 <header class="top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a><nav class="topnav"><a class="navlink" href="store.html">참여 매장</a><a class="btn primary" href="apply.html">사장님 참여</a></nav></header>
 <main>
