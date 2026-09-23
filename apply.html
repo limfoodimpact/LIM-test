@@ -1,10 +1,49 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="stylesheet" href="site.css"><title>사장님 참여 | LIM Food Impact</title><style>
 .owner-visual{padding:48px 0 54px;background:#fff}.owner-copy{max-width:760px}.owner-kicker{display:inline-block;font-weight:800;color:#315b86;background:#eef5fb;border-radius:999px;padding:9px 15px;margin-bottom:22px}.owner-visual h1{font-size:clamp(42px,5.5vw,68px);line-height:1.08;letter-spacing:-.055em;margin:0 0 22px;color:#17283b}.owner-visual h1 em{font-style:normal;color:#2476bd}.owner-visual .sub{font-size:21px;line-height:1.55;margin:0 0 28px;color:#34465a}.owner-visual .hero-btn{display:inline-flex;justify-content:center;min-width:240px}.owner-flow{padding:58px 0;background:#f3f7fa}.owner-flow h2{font-size:34px;margin:0 0 32px}.owner-flow-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.flow-card{background:#fff;border:1px solid #dbe5ed;border-radius:18px;padding:24px 18px;min-height:135px}.flow-card b{display:block;color:#7c8d9d;font-size:14px;margin-bottom:13px}.flow-card strong{font-size:19px;line-height:1.45;color:#17283b}.owner-note{margin:28px 0 0;color:#526475;font-size:16px}.apply-box{margin-top:48px!important}
 @media(max-width:760px){.owner-visual{padding:42px 0 46px}.owner-copy{max-width:none}.owner-kicker{margin-bottom:18px}.owner-visual h1{font-size:43px;line-height:1.12}.owner-visual .sub{font-size:18px;margin-bottom:24px}.owner-visual .hero-btn{width:100%}.owner-flow{padding:46px 0}.owner-flow h2{font-size:30px;margin-bottom:26px}.owner-flow-grid{grid-template-columns:1fr 1fr}.flow-card{min-height:128px;padding:20px 17px}.flow-card strong{font-size:17px}.owner-note{font-size:15px;line-height:1.55}.apply-box{margin-top:36px!important}}
-</style></head><body>
-<header class="wrap top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a><nav class="topnav"><a class="navlink" href="store.html">참여 매장</a><a class="btn primary" href="apply.html">사장님 참여</a></nav></header>
+</style>
+<style id="lim-menu-v3">
+.lim-menu-btn{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border:0;background:transparent;color:#244A5A;font-size:31px;line-height:1;cursor:pointer;border-radius:12px}
+.lim-menu-panel{position:fixed;inset:0;z-index:9999;display:none;background:rgba(20,34,28,.28)}
+.lim-menu-panel.open{display:block}
+.lim-menu-sheet{position:absolute;top:0;right:0;width:min(82vw,330px);height:100%;box-sizing:border-box;background:#fff;padding:24px 22px;box-shadow:-12px 0 35px rgba(0,0,0,.12)}
+.lim-menu-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.lim-menu-title{font-weight:800;color:#365B43;font-size:18px}
+.lim-menu-close{border:0;background:transparent;font-size:30px;line-height:1;padding:6px;cursor:pointer;color:#303A35}
+.lim-menu-links{display:grid;gap:4px}
+.lim-menu-links a{display:block;padding:15px 6px;border-bottom:1px solid #e8ece8;text-decoration:none;color:#303A35;font-weight:700;font-size:18px}
+body.menu-open{overflow:hidden}
+</style>
+</head><body>
+<header class="wrap top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a>
+<button class="lim-menu-btn" type="button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+<div class="lim-menu-panel" aria-hidden="true">
+  <div class="lim-menu-sheet" role="dialog" aria-modal="true" aria-label="메뉴">
+    <div class="lim-menu-head"><span class="lim-menu-title">LIM FOOD IMPACT</span><button class="lim-menu-close" type="button" aria-label="메뉴 닫기">×</button></div>
+    <nav class="lim-menu-links">
+      <a href="index.html">홈</a>
+      <a href="index.html#stores">참여 매장</a>
+      <a href="apply.html">매장 참여 신청</a>
+      <a href="owner_login.html">사장님 로그인</a>
+      <a href="story.html">LIM 이야기</a>
+    </nav>
+  </div>
+</div>
+</header>
 <main>
-<section class="owner-visual"><div class="wrap"><div class="owner-copy"><span class="owner-kicker">음식점 한 달 시범사업</span><h1>원가는 줄이고,<br><em>가게의 가치는 높이고</em></h1><p class="sub">손님은 필요한 만큼,<br><strong>사장님은 체크만 해주세요.</strong></p><a class="btn primary hero-btn" href="#apply-form">시범사업 참여 문의</a></div></div></section>
+<section class="owner-visual"><div class="wrap"><div class="owner-copy"><span class="owner-kicker">음식점 한 달 시범사업</span><h1>원가는 줄이고,<br><em>가게의 가치는 높이고</em></h1><p class="sub">손님은 필요한 만큼,<br><strong>사장님은 체크만 해주세요.</strong></p><a class="btn primary hero-btn" href="#apply-form">매장 참여 신청</a></div></div></section>
 <section class="owner-flow"><div class="wrap"><h2>이렇게 운영됩니다.</h2><div class="owner-flow-grid"><div class="flow-card"><b>01</b><strong>LIM이 안내문을<br>준비합니다.</strong></div><div class="flow-card"><b>02</b><strong>손님이 필요한 만큼<br>선택합니다.</strong></div><div class="flow-card"><b>03</b><strong>사장님은<br>체크만 합니다.</strong></div><div class="flow-card"><b>04</b><strong>LIM이 기부로<br>연결합니다.</strong></div></div><p class="owner-note">한 달 동안 매장에서 실제로 확인해보는 시범사업입니다.</p></div></section>
-<section class="soft" id="apply-form"><div class="wrap"><div class="apply-box"><h2>시범사업 참여 문의</h2><p class="lead">아래 내용만 남겨주시면 됩니다.</p><form onsubmit="event.preventDefault();document.getElementById('m').textContent='현재는 화면 확인용입니다. 실제 접수 기능은 다음 단계에서 연결합니다.'"><div class="form-grid"><div class="field"><label for="shop">매장명</label><input id="shop" required placeholder="예: ○○식당"></div><div class="field"><label for="name">사장님 성함</label><input id="name" required></div><div class="field"><label for="phone">연락처</label><input id="phone" required inputmode="tel" placeholder="010-0000-0000"></div><div class="field"><label for="area">지역</label><input id="area" placeholder="예: 강원 영월"></div><div class="field full"><button class="btn primary" style="width:100%;font-size:17px">참여 문의 보내기</button></div></div><p id="m" class="note"></p></form><p class="contact-note">이메일 문의 · limfoodimpact@gmail.com</p></div></div></section>
-</main><footer class="footer">LIM FOOD IMPACT</footer></body></html>
+<section class="soft" id="apply-form"><div class="wrap"><div class="apply-box"><h2>매장 참여 신청</h2><p class="lead">아래 내용을 입력해주세요.</p><form onsubmit="event.preventDefault();document.getElementById('m').textContent='현재는 화면 확인용입니다. 실제 접수 기능은 다음 단계에서 연결합니다.'"><div class="form-grid"><div class="field"><label for="shop">매장명</label><input id="shop" required placeholder="예: ○○식당"></div><div class="field"><label for="name">사장님 성함</label><input id="name" required></div><div class="field"><label for="phone">연락처</label><input id="phone" required inputmode="tel" placeholder="010-0000-0000"></div><div class="field"><label for="area">지역</label><input id="area" placeholder="예: 강원 영월"></div><div class="field full"><button class="btn primary" style="width:100%;font-size:17px">참여 신청하기</button></div></div><p id="m" class="note"></p></form><p class="contact-note">이메일 문의 · limfoodimpact@gmail.com</p></div></div></section>
+</main><footer class="footer">LIM FOOD IMPACT</footer>
+<script id="lim-menu-js">
+document.addEventListener('DOMContentLoaded',function(){
+ const b=document.querySelector('.lim-menu-btn'), p=document.querySelector('.lim-menu-panel'), c=document.querySelector('.lim-menu-close');
+ if(!b||!p)return;
+ const open=()=>{p.classList.add('open');p.setAttribute('aria-hidden','false');b.setAttribute('aria-expanded','true');document.body.classList.add('menu-open')};
+ const close=()=>{p.classList.remove('open');p.setAttribute('aria-hidden','true');b.setAttribute('aria-expanded','false');document.body.classList.remove('menu-open')};
+ b.addEventListener('click',open); if(c)c.addEventListener('click',close);
+ p.addEventListener('click',e=>{if(e.target===p)close()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+});
+</script>
+</body></html>

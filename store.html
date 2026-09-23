@@ -46,9 +46,36 @@ h1{font-size:34px;margin:15px 0 10px}
  .plus{height:76px;font-size:30px}
 }
 </style>
+
+<style id="lim-menu-v3">
+.lim-menu-btn{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border:0;background:transparent;color:#244A5A;font-size:31px;line-height:1;cursor:pointer;border-radius:12px}
+.lim-menu-panel{position:fixed;inset:0;z-index:9999;display:none;background:rgba(20,34,28,.28)}
+.lim-menu-panel.open{display:block}
+.lim-menu-sheet{position:absolute;top:0;right:0;width:min(82vw,330px);height:100%;box-sizing:border-box;background:#fff;padding:24px 22px;box-shadow:-12px 0 35px rgba(0,0,0,.12)}
+.lim-menu-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.lim-menu-title{font-weight:800;color:#365B43;font-size:18px}
+.lim-menu-close{border:0;background:transparent;font-size:30px;line-height:1;padding:6px;cursor:pointer;color:#303A35}
+.lim-menu-links{display:grid;gap:4px}
+.lim-menu-links a{display:block;padding:15px 6px;border-bottom:1px solid #e8ece8;text-decoration:none;color:#303A35;font-weight:700;font-size:18px}
+body.menu-open{overflow:hidden}
+</style>
 </head>
 <body>
-<header class="top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a><nav class="topnav"><a class="navlink" href="store.html">참여 매장</a><a class="btn primary" href="apply.html">사장님 참여</a></nav></header>
+<header class="top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a>
+<button class="lim-menu-btn" type="button" aria-label="메뉴 열기" aria-expanded="false">☰</button>
+<div class="lim-menu-panel" aria-hidden="true">
+  <div class="lim-menu-sheet" role="dialog" aria-modal="true" aria-label="메뉴">
+    <div class="lim-menu-head"><span class="lim-menu-title">LIM FOOD IMPACT</span><button class="lim-menu-close" type="button" aria-label="메뉴 닫기">×</button></div>
+    <nav class="lim-menu-links">
+      <a href="index.html">홈</a>
+      <a href="index.html#stores">참여 매장</a>
+      <a href="apply.html">매장 참여 신청</a>
+      <a href="owner_login.html">사장님 로그인</a>
+      <a href="story.html">LIM 이야기</a>
+    </nav>
+  </div>
+</div>
+</header>
 <main>
 <section class="panel">
  <div class="head"><span class="badge">참여 매장 체크</span><h1>홍제동우동국수</h1><div class="guide">손님 요청이 있을 때 해당 항목을<br>한 번만 눌러주세요.</div></div>
@@ -67,5 +94,17 @@ document.getElementById('mainPlus').onclick=()=>{mainCount++;draw()};
 document.getElementById('mainMinus').onclick=()=>{if(mainCount>0)mainCount--;draw()};
 document.getElementById('sidePlus').onclick=()=>{sideCount++;draw()};
 document.getElementById('sideMinus').onclick=()=>{if(sideCount>0)sideCount--;draw()};
+</script>
+
+<script id="lim-menu-js">
+document.addEventListener('DOMContentLoaded',function(){
+ const b=document.querySelector('.lim-menu-btn'), p=document.querySelector('.lim-menu-panel'), c=document.querySelector('.lim-menu-close');
+ if(!b||!p)return;
+ const open=()=>{p.classList.add('open');p.setAttribute('aria-hidden','false');b.setAttribute('aria-expanded','true');document.body.classList.add('menu-open')};
+ const close=()=>{p.classList.remove('open');p.setAttribute('aria-hidden','true');b.setAttribute('aria-expanded','false');document.body.classList.remove('menu-open')};
+ b.addEventListener('click',open); if(c)c.addEventListener('click',close);
+ p.addEventListener('click',e=>{if(e.target===p)close()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+});
 </script>
 </body></html>
