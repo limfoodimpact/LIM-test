@@ -1,46 +1,60 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><link rel="stylesheet" href="site.css"><title>LIM Food Impact</title><style>
 .hero .actions,#stores .actions{display:flex;flex-wrap:wrap;gap:10px}
-.hero .actions .btn:not(.primary),#stores .actions .btn{background:#fff;border:1px solid rgba(54,91,67,.24);color:#365B43}
+#stores .actions .btn{background:#fff;border:1px solid #dce5ec;color:#365B43}
+.pilot-note{margin:14px 0 0!important;font-size:14px!important;color:#6f7d86!important}
+.flow3{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.flow3 div{flex:1;min-width:0}
+.flow3 span{display:block;font-size:13px;color:#71808b;margin-bottom:7px}
+.flow3 strong{font-size:18px;line-height:1.35;word-break:keep-all}
+.flow3 i{font-style:normal;color:#8a979f}
 @media(max-width:560px){
   .top{padding-top:13px!important;padding-bottom:13px!important}
   .logo{max-width:145px!important;height:auto!important}
-  .topnav{gap:7px!important}
-  .topnav .navlink{font-size:14px!important;white-space:nowrap!important}
-  .topnav .btn{font-size:14px!important;padding:10px 13px!important;white-space:nowrap!important}
-  .hero{padding:34px 0 38px!important}
-  .hero .wrap,.section .wrap{padding-left:20px!important;padding-right:20px!important}
-  .hero h1{font-size:clamp(30px,8.6vw,38px)!important;line-height:1.22!important;letter-spacing:-1.5px!important;margin:0 0 20px!important;word-break:keep-all!important}
-  .hero p{font-size:17px!important;line-height:1.62!important;margin:0 0 24px!important;word-break:keep-all!important}
-  .hero p br{display:none!important}
-  .hero .actions .btn,#stores .actions .btn{width:100%!important;min-height:52px!important;display:flex!important;align-items:center!important;justify-content:center!important}
-  .section{padding:40px 0!important}
-  .section h2{font-size:28px!important;line-height:1.25!important;margin:0 0 22px!important}
-  .steps{display:grid!important;grid-template-columns:1fr!important;gap:10px!important}
-  .step{min-height:0!important;padding:16px 18px!important;display:grid!important;grid-template-columns:44px 1fr!important;align-items:center!important;gap:8px!important;overflow:visible!important}
-  .step .num{margin:0!important;font-size:14px!important}
-  .step strong{font-size:18px!important;line-height:1.4!important;word-break:keep-all!important}
+  .topnav .navlink{display:none!important}
+  .topnav .btn{font-size:14px!important;padding:10px 14px!important;white-space:nowrap!important}
+  .hero{padding:38px 0 34px!important}
+  .hero .wrap,.section .wrap{padding-left:24px!important;padding-right:24px!important}
+  .hero h1{font-size:clamp(31px,8.5vw,38px)!important;line-height:1.2!important;letter-spacing:-1.6px!important;margin:0 0 22px!important;word-break:keep-all!important}
+  .hero p:not(.pilot-note){font-size:17px!important;line-height:1.62!important;margin:0 0 23px!important;word-break:keep-all!important}
+  .hero p:not(.pilot-note) br{display:block!important}
+  .hero .actions .btn{width:100%!important;min-height:54px!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:17px!important}
+  .pilot-note{text-align:center!important;margin-top:12px!important}
+  .section{padding:36px 0!important}
+  .section h2{font-size:27px!important;line-height:1.25!important;margin:0 0 24px!important}
+  .flow3{display:grid!important;grid-template-columns:1fr 18px 1fr 18px 1fr!important;gap:4px!important;align-items:start!important}
+  .flow3 div{text-align:center!important}
+  .flow3 span{font-size:12px!important;margin-bottom:7px!important}
+  .flow3 strong{display:block!important;font-size:15px!important;line-height:1.42!important;word-break:keep-all!important}
+  .flow3 i{padding-top:24px!important;text-align:center!important;font-size:15px!important}
+  #stores .actions .btn{width:100%!important;min-height:50px!important;display:flex!important;align-items:center!important;justify-content:center!important}
   .footer{padding:24px 18px!important;text-align:center!important;font-size:13px!important}
 }
-@media(max-width:380px){.topnav .navlink{display:none!important}.logo{max-width:128px!important}.hero h1{font-size:29px!important}}
+@media(max-width:380px){
+  .logo{max-width:128px!important}
+  .hero h1{font-size:29px!important}
+  .flow3 strong{font-size:14px!important}
+}
 </style></head><body><header class="wrap top"><a href="index.html"><img class="logo" src="lim-logo.png" alt="LIM Food Impact"></a><nav class="topnav"><a class="navlink" href="#stores">참여 매장</a><a class="btn primary" href="apply.html">사장님 참여</a></nav></header><main>
 <section class="hero">
   <div class="wrap">
     <h1>안 드실 음식은<br>처음부터 받지 않으셔도 됩니다.</h1>
-    <p>주문할 때 음식이나 양을 줄이면<br><strong>시범사업에서는 LIM이 기부로 연결합니다.</strong></p>
+    <p>주문할 때 음식이나 양을 줄이면<br><strong>LIM이 기부로 연결합니다.</strong></p>
     <div class="actions">
       <a class="btn primary" href="#stores">참여 매장 보기</a>
-      <a class="btn" href="apply.html">사장님 참여하기</a>
     </div>
+    <p class="pilot-note">현재 시범사업 운영 중</p>
   </div>
 </section>
 
 <section class="section soft" id="how">
   <div class="wrap">
     <h2>이렇게 참여합니다.</h2>
-    <div class="steps">
-      <div class="step"><span class="num">01</span><strong>주문할 때<br>요청합니다</strong></div>
-      <div class="step"><span class="num">02</span><strong>매장에서<br>확인합니다</strong></div>
-      <div class="step"><span class="num">03</span><strong>LIM이 기부로<br>연결합니다</strong></div>
+    <div class="flow3">
+      <div><span>01</span><strong>주문할 때 요청</strong></div>
+      <i>→</i>
+      <div><span>02</span><strong>매장에서 확인</strong></div>
+      <i>→</i>
+      <div><span>03</span><strong>LIM이 기부로 연결</strong></div>
     </div>
   </div>
 </section>
