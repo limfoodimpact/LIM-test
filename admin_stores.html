@@ -6,31 +6,91 @@
 .approve-row button{background:#365B43;color:#fff;border:0}
 .approve-help{font-size:12px;color:#68746d;margin:7px 0 0}
 .admin-store-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.store-code{font-size:13px;color:#68746d}.owner-state{margin:10px 0 0;font-size:14px;color:#526779}.owner-linked{color:#365B43;font-weight:bold}.store-manager{margin-top:22px}.store-manager>h2{margin-top:0}
+
+.inquiry-card{padding:22px}
+.inquiry-card h2{margin:0 0 6px}
+.inquiry-summary{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.inquiry-meta{margin:0;color:#526779}
+.inquiry-phone{display:inline-block;margin-top:8px;font-weight:bold}
+.inquiry-status-badge{flex:0 0 auto;padding:5px 9px;border-radius:999px;background:#eef3f7;color:#1F4E79;font-size:12px;font-weight:bold}
+.manage-details{margin-top:18px;background:#f7f9fb;border:1px solid #dce5ec}
+.manage-details>summary{font-weight:bold;color:#1F4E79;padding:2px 0;list-style:none}
+.manage-details>summary::-webkit-details-marker{display:none}
+.manage-details>summary::after{content:"＋";float:right;font-size:20px;line-height:1}
+.manage-details[open]>summary::after{content:"−"}
+.inquiry-extra{padding-top:8px}
+.inquiry-extra .received{font-size:12px;color:#68746d}
+.inquiry-extra .question{padding:10px 12px;background:white;border-radius:10px}
+@media(max-width:550px){
+  .inquiry-card{padding:18px}
+  .inquiry-summary{gap:8px}
+  .inquiry-status-badge{font-size:11px}
+  .manage-details{padding:12px}
+}
+
 </style></head><body><header><a href="./index.html"><img src="./lim-logo.png" alt="LIM Food Impact 홈으로"></a><a href="./index.html">홈으로</a></header><main><section class="hero"><h1>매장 참여 문의 관리</h1><a href="./admin_lim.html">이름 공개 관리 →</a><p class="note">연락처와 메모는 운영자 전용입니다. 접수 후 90일이 지나면 삭제됩니다.</p></section><section id="login"><h2>운영자 로그인</h2><form id="loginForm"><label for="email">이메일</label><input type="email" id="email" required autocomplete="username"><label for="password">비밀번호</label><input type="password" id="password" required autocomplete="current-password"><button>로그인</button></form></section><section id="console" hidden><button id="refresh">새로고침</button> <button id="logout">로그아웃</button><label for="filter">상태</label><select id="filter"><option value="">전체</option><option>새 문의</option><option>상담 중</option><option>참여 확정</option><option>보류</option><option>종료</option></select></section><p id="message" class="status" role="status"></p><section id="inquirySection"><h2 id="inquiryTitle" hidden>1. 참여 신청 · 상담</h2><p id="inquiryGuide" class="note" hidden>신청 내용을 확인하고 상담 상태와 메모를 관리합니다. 참여가 결정되면 신청 카드 안에서 승인합니다.</p><div id="records"></div></section><section id="storeManager" class="store-manager" hidden><h2>2. 승인 매장 · 사장님 계정</h2><p class="note">승인이 끝난 매장만 표시됩니다. 사장님 로그인 이메일을 연결하거나 변경합니다.</p><div id="stores"></div></section></main><script>const BASE='https://slrbqhygpexksvduluev.supabase.co',KEY='sb_publishable_K9fILZLweR1Qi8IBQyNEmA_OMV1F4yb';const $=s=>document.querySelector(s);let token=sessionStorage.getItem('lim_admin_token')||'',rows=[],stores=[];function clear(){token='';rows=[];stores=[];sessionStorage.removeItem('lim_admin_token');$('#records').replaceChildren();$('#stores').replaceChildren();$('#storeManager').hidden=true;$('#inquiryTitle').hidden=true;$('#inquiryGuide').hidden=true;$('#console').hidden=true;$('#login').hidden=false}async function rpc(name,body={}){const r=await fetch(BASE+'/rest/v1/rpc/'+name,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(!r.ok){if(r.status===401||r.status===403)clear();throw Error('요청 실패')}return d}function text(tag,value,parent){const el=document.createElement(tag);el.textContent=value;parent.append(el);return el}function renderStores(){const root=$('#stores');root.replaceChildren();if(!stores.length){text('p','승인된 참여 매장이 없습니다.',root);return}for(const s of stores){const card=document.createElement('article');const head=document.createElement('div');head.className='admin-store-head';const left=document.createElement('div');text('h3',s.store_name,left);const meta=text('div',(s.region||'지역 미등록')+' · '+s.store_code,left);meta.className='store-code';head.append(left);card.append(head);const state=text('p',s.owner_email?'연결 이메일: '+s.owner_email:'사장님 계정이 아직 연결되지 않았습니다.',card);state.className=s.owner_email?'owner-state owner-linked':'owner-state';const row=document.createElement('div');row.className='approve-row';const email=document.createElement('input');email.type='email';email.placeholder='사장님 로그인 이메일';email.autocomplete='email';email.value=s.owner_email||'';email.setAttribute('aria-label',s.store_name+' 사장님 로그인 이메일');const btn=text('button',s.owner_email?'계정 연결 변경':'계정 연결',row);row.prepend(email);card.append(row);const help=text('p','Supabase Authentication에 만든 사장님 이메일을 입력합니다. 같은 이메일로 다시 연결하면 현재 매장 연결이 유지됩니다.',card);help.className='approve-help';btn.onclick=async()=>{const e=email.value.trim().toLowerCase();if(!e||!e.includes('@')){alert('사장님 로그인 이메일을 입력해 주세요.');return}if(!confirm(s.store_name+'의 사장님 로그인 계정을 '+e+' 로 연결할까요?'))return;btn.disabled=true;try{await rpc('link_store_owner_by_email',{p_store_id:s.id,p_owner_email:e});$('#message').textContent=s.store_name+' · 사장님 계정 연결 완료';await loadStores()}catch(err){console.error(err);$('#message').textContent='계정을 연결하지 못했습니다. 이메일 계정과 매장 연결 상태를 확인해 주세요.'}finally{btn.disabled=false}};root.append(card)}}
-function render(){$('#records').replaceChildren();const items=rows.filter(r=>!$('#filter').value||r.status===$('#filter').value);if(!items.length){text('p','해당하는 문의가 없습니다.',$('#records'));return}for(const r of items){const card=document.createElement('article');text('h2',r.store,card);text('p',r.region+' · '+r.food+' · '+r.intent,card);const a=text('a',r.phone,card);a.href='tel:'+r.phone;text('p','접수: '+new Date(r.created_at).toLocaleString('ko-KR')+' / '+r.id,card);text('p',r.question||'문의 내용 없음',card);const statusLabel=text('label','상담 진행 상태',card);statusLabel.htmlFor='status-'+r.id;const status=document.createElement('select');status.id='status-'+r.id;status.setAttribute('aria-label',r.store+' 상담 상태');for(const name of ['새 문의','상담 중','참여 확정','보류','종료']){const o=document.createElement('option');o.textContent=name;status.append(o)}status.value=r.status;card.append(status);const noteLabel=text('label','운영자 전용 메모',card);noteLabel.htmlFor='note-'+r.id;const noteHelp=text('p','신청자에게 전송되지 않습니다. 전화·문자로 상담한 내용을 기록해 주세요.',card);noteHelp.className='note';noteHelp.id='note-help-'+r.id;const note=document.createElement('textarea');note.id='note-'+r.id;note.setAttribute('aria-describedby',noteHelp.id);note.value=r.admin_note;note.maxLength=2000;note.setAttribute('aria-label',r.store+' 상담 메모');note.placeholder='예: 전화로 안내 완료. 다음 주 시작 희망.';card.append(note);const dateLabel=text('label','다음 연락 예정일',card);dateLabel.htmlFor='date-'+r.id;const dateHelp=text('p','운영자가 확인하는 일정입니다. 자동 알림은 발송되지 않습니다.',card);dateHelp.className='note';dateHelp.id='date-help-'+r.id;const date=document.createElement('input');date.id='date-'+r.id;date.setAttribute('aria-describedby',dateHelp.id);date.type='date';date.value=r.next_contact||'';date.setAttribute('aria-label','다음 연락 예정일');card.append(date);const save=text('button','변경 저장',card);save.onclick=async()=>{save.disabled=true;try{await rpc('review_store_inquiry',{p_id:r.id,p_status:status.value,p_note:note.value,p_next:date.value||null,p_delete:false});await load();$('#message').textContent='운영자용 기록을 저장했습니다. 신청자에게 메시지가 전송되지는 않습니다.'}catch{$('#message').textContent='저장하지 못했습니다. 로그인과 연결을 확인해 주세요.'}finally{save.disabled=false}};
-const approveBox=document.createElement('div');approveBox.className='approve-box';
-const approveTitle=text('strong','참여 승인',approveBox);
-const approveRow=document.createElement('div');approveRow.className='approve-row';
-const code=document.createElement('input');code.type='text';code.placeholder='매장 코드 예: yeongwol01';code.autocomplete='off';code.setAttribute('aria-label',r.store+' 매장 코드');
-const approve=text('button','승인',approveRow);
-approveRow.prepend(code);approveBox.append(approveRow);
-const approveHelp=text('p','승인하면 참여 확정 상태가 되고 매장 계정 연결 준비가 됩니다.',approveBox);approveHelp.className='approve-help';
-approve.onclick=async()=>{const v=code.value.trim().toLowerCase();if(!/^[a-z0-9][a-z0-9_-]{1,39}$/.test(v)){alert('매장 코드는 영문 소문자·숫자·-·_ 로 2~40자 입력해 주세요.');return}
-if(!confirm(r.store+'을(를) 참여 매장으로 승인할까요?'))return;
-approve.disabled=true;try{
- const storeId=await rpc('approve_store_inquiry',{p_inquiry_id:r.id,p_store_code:v});
- approveBox.innerHTML='';
- const done=text('strong','참여 승인 완료',approveBox);
- const ownerRow=document.createElement('div');ownerRow.className='approve-row';
- const email=document.createElement('input');email.type='email';email.placeholder='사장님 로그인 이메일';email.autocomplete='email';email.setAttribute('aria-label',r.store+' 사장님 로그인 이메일');
- const linkBtn=text('button','계정 연결',ownerRow);ownerRow.prepend(email);approveBox.append(ownerRow);
- const help=text('p','Supabase Authentication에 먼저 만들어진 사장님 계정을 이 매장과 연결합니다.',approveBox);help.className='approve-help';
- linkBtn.onclick=async()=>{const e=email.value.trim().toLowerCase();if(!e||!e.includes('@')){alert('사장님 로그인 이메일을 입력해 주세요.');return}
-  linkBtn.disabled=true;try{await rpc('link_store_owner_by_email',{p_store_id:storeId,p_owner_email:e});$('#message').textContent=r.store+' · 사장님 계정 연결 완료';linkBtn.textContent='연결 완료';email.disabled=true}
-  catch(err){console.error(err);$('#message').textContent='계정을 연결하지 못했습니다. Supabase Authentication에 같은 이메일 계정이 있는지 확인해 주세요.'}
-  finally{linkBtn.disabled=false}
- };
- $('#message').textContent=r.store+' 승인 완료 · 사장님 계정을 연결할 수 있습니다.';
-}catch(e){console.error(e);$('#message').textContent='승인하지 못했습니다. 매장 코드 중복 또는 연결 상태를 확인해 주세요.'}finally{approve.disabled=false}};
-card.append(approveBox);
-const del=text('button','완전 삭제',card);del.onclick=async()=>{if(!confirm('이 문의와 연락처를 완전히 삭제할까요? 복구할 수 없습니다.'))return;del.disabled=true;try{await rpc('review_store_inquiry',{p_id:r.id,p_status:r.status,p_note:'',p_next:null,p_delete:true});await load()}catch{$('#message').textContent='삭제하지 못했습니다.';del.disabled=false}};$('#records').append(card)}}async function loadStores(){stores=await rpc('get_admin_stores');$('#storeManager').hidden=false;renderStores()}async function load(){const result=await Promise.all([rpc('get_store_inquiries'),rpc('get_admin_stores')]);rows=result[0];stores=result[1];$('#login').hidden=true;$('#console').hidden=false;$('#storeManager').hidden=false;$('#inquiryTitle').hidden=false;$('#inquiryGuide').hidden=false;renderStores();render()}$('#loginForm').onsubmit=async e=>{e.preventDefault();try{const r=await fetch(BASE+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({email:$('#email').value.trim(),password:$('#password').value})});const d=await r.json();if(!r.ok)throw Error();token=d.access_token;sessionStorage.setItem('lim_admin_token',token);$('#password').value='';await load();$('#message').textContent=''}catch{clear();$('#message').textContent='로그인 정보 또는 운영자 권한을 확인해 주세요.'}};$('#filter').onchange=render;$('#refresh').onclick=()=>load().catch(()=>$('#message').textContent='불러오지 못했습니다. 다시 로그인해 주세요.');$('#logout').onclick=clear;if(token)load().catch(()=>{clear();$('#message').textContent='다시 로그인해 주세요.'});</script></body></html>
+function render(){
+const root=$('#records');root.replaceChildren();
+const items=rows.filter(r=>!$('#filter').value||r.status===$('#filter').value);
+if(!items.length){text('p','해당하는 문의가 없습니다.',root);return}
+for(const r of items){
+ const card=document.createElement('article');card.className='inquiry-card';
+ const summary=document.createElement('div');summary.className='inquiry-summary';
+ const left=document.createElement('div');
+ text('h2',r.store,left);
+ const meta=text('p',r.region+' · '+r.food+' · '+r.intent,left);meta.className='inquiry-meta';
+ const phone=text('a',r.phone,left);phone.href='tel:'+r.phone;phone.className='inquiry-phone';
+ const badge=text('span',r.status,summary);badge.className='inquiry-status-badge';
+ summary.prepend(left);card.append(summary);
+
+ const details=document.createElement('details');details.className='manage-details';
+ const detailsSummary=document.createElement('summary');detailsSummary.textContent='상세 관리';details.append(detailsSummary);
+ const body=document.createElement('div');body.className='inquiry-extra';
+ const received=text('p','접수: '+new Date(r.created_at).toLocaleString('ko-KR')+' / '+r.id,body);received.className='received';
+ const question=text('p',r.question||'문의 내용 없음',body);question.className='question';
+
+ const statusLabel=text('label','상담 진행 상태',body);statusLabel.htmlFor='status-'+r.id;
+ const status=document.createElement('select');status.id='status-'+r.id;status.setAttribute('aria-label',r.store+' 상담 상태');
+ for(const name of ['새 문의','상담 중','참여 확정','보류','종료']){const o=document.createElement('option');o.textContent=name;status.append(o)}
+ status.value=r.status;body.append(status);
+
+ const noteLabel=text('label','운영자 전용 메모',body);noteLabel.htmlFor='note-'+r.id;
+ const noteHelp=text('p','신청자에게 전송되지 않습니다. 전화·문자로 상담한 내용을 기록해 주세요.',body);noteHelp.className='note';noteHelp.id='note-help-'+r.id;
+ const note=document.createElement('textarea');note.id='note-'+r.id;note.setAttribute('aria-describedby',noteHelp.id);note.value=r.admin_note||'';note.maxLength=2000;note.setAttribute('aria-label',r.store+' 상담 메모');note.placeholder='예: 전화로 안내 완료. 다음 주 시작 희망.';body.append(note);
+
+ const dateLabel=text('label','다음 연락 예정일',body);dateLabel.htmlFor='date-'+r.id;
+ const dateHelp=text('p','운영자가 확인하는 일정입니다. 자동 알림은 발송되지 않습니다.',body);dateHelp.className='note';dateHelp.id='date-help-'+r.id;
+ const date=document.createElement('input');date.id='date-'+r.id;date.setAttribute('aria-describedby',dateHelp.id);date.type='date';date.value=r.next_contact||'';date.setAttribute('aria-label','다음 연락 예정일');body.append(date);
+
+ const save=text('button','변경 저장',body);
+ save.onclick=async()=>{save.disabled=true;try{await rpc('review_store_inquiry',{p_id:r.id,p_status:status.value,p_note:note.value,p_next:date.value||null,p_delete:false});await load();$('#message').textContent='운영자용 기록을 저장했습니다. 신청자에게 메시지가 전송되지는 않습니다.'}catch{$('#message').textContent='저장하지 못했습니다. 로그인과 연결을 확인해 주세요.'}finally{save.disabled=false}};
+
+ const approveBox=document.createElement('div');approveBox.className='approve-box';
+ text('strong','참여 승인',approveBox);
+ const approveRow=document.createElement('div');approveRow.className='approve-row';
+ const code=document.createElement('input');code.type='text';code.placeholder='매장 코드 예: yeongwol01';code.autocomplete='off';code.setAttribute('aria-label',r.store+' 매장 코드');
+ const approve=text('button','승인',approveRow);approveRow.prepend(code);approveBox.append(approveRow);
+ const approveHelp=text('p','승인하면 참여 확정 상태가 되고 매장 계정 연결 준비가 됩니다.',approveBox);approveHelp.className='approve-help';
+ approve.onclick=async()=>{const v=code.value.trim().toLowerCase();if(!/^[a-z0-9][a-z0-9_-]{1,39}$/.test(v)){alert('매장 코드는 영문 소문자·숫자·-·_ 로 2~40자 입력해 주세요.');return}
+ if(!confirm(r.store+'을(를) 참여 매장으로 승인할까요?'))return;
+ approve.disabled=true;try{
+  const storeId=await rpc('approve_store_inquiry',{p_inquiry_id:r.id,p_store_code:v});
+  approveBox.innerHTML='';text('strong','참여 승인 완료',approveBox);
+  const ownerRow=document.createElement('div');ownerRow.className='approve-row';
+  const email=document.createElement('input');email.type='email';email.placeholder='사장님 로그인 이메일';email.autocomplete='email';email.setAttribute('aria-label',r.store+' 사장님 로그인 이메일');
+  const linkBtn=text('button','계정 연결',ownerRow);ownerRow.prepend(email);approveBox.append(ownerRow);
+  const help=text('p','Supabase Authentication에 먼저 만들어진 사장님 계정을 이 매장과 연결합니다.',approveBox);help.className='approve-help';
+  linkBtn.onclick=async()=>{const e=email.value.trim().toLowerCase();if(!e||!e.includes('@')){alert('사장님 로그인 이메일을 입력해 주세요.');return}
+   linkBtn.disabled=true;try{await rpc('link_store_owner_by_email',{p_store_id:storeId,p_owner_email:e});$('#message').textContent=r.store+' · 사장님 계정 연결 완료';linkBtn.textContent='연결 완료';email.disabled=true}
+   catch(err){console.error(err);$('#message').textContent='계정을 연결하지 못했습니다. Supabase Authentication에 같은 이메일 계정이 있는지 확인해 주세요.'}
+   finally{linkBtn.disabled=false}};
+  $('#message').textContent=r.store+' 승인 완료 · 사장님 계정을 연결할 수 있습니다.';
+ }catch(e){console.error(e);$('#message').textContent='승인하지 못했습니다. 매장 코드 중복 또는 연결 상태를 확인해 주세요.'}finally{approve.disabled=false}};
+ body.append(approveBox);
+
+ const del=text('button','완전 삭제',body);
+ del.onclick=async()=>{if(!confirm('이 문의와 연락처를 완전히 삭제할까요? 복구할 수 없습니다.'))return;del.disabled=true;try{await rpc('review_store_inquiry',{p_id:r.id,p_status:r.status,p_note:'',p_next:null,p_delete:true});await load()}catch{$('#message').textContent='삭제하지 못했습니다.';del.disabled=false}};
+
+ details.append(body);card.append(details);root.append(card);
+}}
+async function loadStores(){stores=await rpc('get_admin_stores');$('#storeManager').hidden=false;renderStores()}async function load(){const result=await Promise.all([rpc('get_store_inquiries'),rpc('get_admin_stores')]);rows=result[0];stores=result[1];$('#login').hidden=true;$('#console').hidden=false;$('#storeManager').hidden=false;$('#inquiryTitle').hidden=false;$('#inquiryGuide').hidden=false;renderStores();render()}$('#loginForm').onsubmit=async e=>{e.preventDefault();try{const r=await fetch(BASE+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({email:$('#email').value.trim(),password:$('#password').value})});const d=await r.json();if(!r.ok)throw Error();token=d.access_token;sessionStorage.setItem('lim_admin_token',token);$('#password').value='';await load();$('#message').textContent=''}catch{clear();$('#message').textContent='로그인 정보 또는 운영자 권한을 확인해 주세요.'}};$('#filter').onchange=render;$('#refresh').onclick=()=>load().catch(()=>$('#message').textContent='불러오지 못했습니다. 다시 로그인해 주세요.');$('#logout').onclick=clear;if(token)load().catch(()=>{clear();$('#message').textContent='다시 로그인해 주세요.'});</script></body></html>
