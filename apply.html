@@ -33,8 +33,60 @@ body.menu-open{overflow:hidden}
 <main>
 <section class="owner-visual"><div class="wrap"><div class="owner-copy"><span class="owner-kicker">음식점 한 달 시범사업</span><h1>원가는 줄이고,<br><em>가게의 가치는 높이고</em></h1><p class="sub">손님은 필요한 만큼,<br><strong>사장님은 체크만 해주세요.</strong></p><a class="btn primary hero-btn" href="#apply-form">매장 참여 신청</a></div></div></section>
 <section class="owner-flow"><div class="wrap"><h2>이렇게 운영됩니다.</h2><div class="owner-flow-grid"><div class="flow-card"><b>01</b><strong>LIM이 안내문을<br>준비합니다.</strong></div><div class="flow-card"><b>02</b><strong>손님이 필요한 만큼<br>선택합니다.</strong></div><div class="flow-card"><b>03</b><strong>사장님은<br>체크만 합니다.</strong></div><div class="flow-card"><b>04</b><strong>LIM이 기부로<br>연결합니다.</strong></div></div><p class="owner-note">한 달 동안 매장에서 실제로 확인해보는 시범사업입니다.</p></div></section>
-<section class="soft" id="apply-form"><div class="wrap"><div class="apply-box"><h2>매장 참여 신청</h2><p class="lead">아래 내용을 입력해주세요.</p><form onsubmit="event.preventDefault();document.getElementById('m').textContent='현재는 화면 확인용입니다. 실제 접수 기능은 다음 단계에서 연결합니다.'"><div class="form-grid"><div class="field"><label for="shop">매장명</label><input id="shop" required placeholder="예: ○○식당"></div><div class="field"><label for="name">사장님 성함</label><input id="name" required></div><div class="field"><label for="phone">연락처</label><input id="phone" required inputmode="tel" placeholder="010-0000-0000"></div><div class="field"><label for="area">지역</label><input id="area" placeholder="예: 강원 영월"></div><div class="field full"><button class="btn primary" style="width:100%;font-size:17px">참여 신청하기</button></div></div><p id="m" class="note"></p></form><p class="contact-note">이메일 문의 · limfoodimpact@gmail.com</p></div></div></section>
+<section class="soft" id="apply-form"><div class="wrap"><div class="apply-box">
+<h2>매장 참여 신청</h2><p class="lead">아래 내용을 입력해주세요.</p>
+<form id="form">
+<div class="form-grid">
+ <div class="field"><label for="store">매장명 *</label><input id="store" required maxlength="80" autocomplete="organization" placeholder="예: ○○식당"></div>
+ <div class="field"><label for="region">지역 *</label><input id="region" required maxlength="80" placeholder="예: 강원 영월"></div>
+ <div class="field"><label for="food">음식 종류 *</label><select id="food" required><option value="">선택해주세요</option><option>한식</option><option>면 요리</option><option>해산물</option><option>고기 요리</option><option>기타</option></select></div>
+ <div class="field"><label for="phone">연락처 *</label><input id="phone" required type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="010-0000-0000"></div>
+ <div class="field full"><label for="intent">현재 생각 *</label><select id="intent"><option>설명을 듣고 싶어요</option><option>참여를 검토하고 있어요</option></select></div>
+ <div class="field full"><label for="question">궁금한 점 <span style="font-weight:400">(선택)</span></label><textarea id="question" maxlength="1000" rows="4" placeholder="연락 가능한 시간이나 궁금한 내용을 남겨주세요."></textarea></div>
+ <div style="position:absolute;left:-9999px" aria-hidden="true"><label>홈페이지<input id="website" tabindex="-1" autocomplete="off"></label></div>
+ <div class="field full"><details><summary>개인정보 수집·이용 안내</summary><p class="note">처리 주체: LIM Food Impact 운영자 강석구·강민구<br>목적: 매장 참여 상담 및 문의 응대<br>필수 항목: 매장명, 지역, 음식 종류, 전화번호, 참여 의사<br>선택 항목: 문의 내용<br>보유 기간: 접수일부터 최대 90일. 참여 확정 후 필요한 정보와 매장 공개 동의는 별도로 안내합니다.</p></details></div>
+ <div class="field full"><label style="display:flex;gap:9px;align-items:flex-start"><input id="consent" type="checkbox" required style="width:auto;margin-top:4px"> <span>[필수] 위 개인정보 수집·이용에 동의합니다.</span></label></div>
+ <div class="field full"><button id="send" class="btn primary" type="submit" style="width:100%;font-size:17px">참여 신청하기</button></div>
+</div><p id="message" class="note" role="status"></p></form>
+<div id="done" hidden tabindex="-1"><h2>참여 신청이 접수되었습니다.</h2><p>남겨주신 연락처로 LIM 운영자가 연락드리겠습니다.</p><p id="receipt" class="note"></p><a class="btn primary" href="index.html">홈으로</a></div>
+<p class="contact-note">이메일 문의 · limfoodimpact@gmail.com</p>
+</div></div></section>
 </main><footer class="footer">LIM FOOD IMPACT</footer>
+<script id="lim-apply-live">
+const LIM_BASE='https://slrbqhygpexksvduluev.supabase.co';
+const LIM_KEY='sb_publishable_K9fILZLweR1Qi8IBQyNEmA_OMV1F4yb';
+let limRequestId=crypto.randomUUID();
+document.getElementById('form').addEventListener('submit',async function(e){
+ e.preventDefault();
+ const q=id=>document.getElementById(id);
+ if(q('website').value)return;
+ const phone=q('phone').value.replace(/[^0-9]/g,'');
+ if(!/^0[0-9]{8,10}$/.test(phone)){q('message').textContent='전화번호를 확인해주세요.';return}
+ const send=q('send');send.disabled=true;q('message').textContent='접수 중입니다…';
+ try{
+  const r=await fetch(LIM_BASE+'/rest/v1/rpc/submit_store_inquiry',{
+   method:'POST',
+   headers:{apikey:LIM_KEY,'Content-Type':'application/json'},
+   body:JSON.stringify({
+    p_request_id:limRequestId,
+    p_store:q('store').value.trim(),
+    p_region:q('region').value.trim(),
+    p_food:q('food').value,
+    p_phone:phone,
+    p_intent:q('intent').value,
+    p_question:q('question').value.trim(),
+    p_consent:q('consent').checked
+   })
+  });
+  const data=await r.json();
+  if(!r.ok||typeof data!=='string')throw new Error();
+  q('form').hidden=true;q('done').hidden=false;q('receipt').textContent='접수번호: '+data;q('done').focus();
+ }catch(err){
+  q('message').textContent='접수 결과를 확인하지 못했습니다. 입력 내용은 유지됩니다. 잠시 후 다시 눌러주세요.';
+  send.disabled=false;
+ }
+});
+</script>
 <script id="lim-menu-js">
 document.addEventListener('DOMContentLoaded',function(){
  const b=document.querySelector('.lim-menu-btn'), p=document.querySelector('.lim-menu-panel'), c=document.querySelector('.lim-menu-close');
